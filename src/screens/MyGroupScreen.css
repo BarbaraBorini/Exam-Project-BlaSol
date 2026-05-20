@@ -30,11 +30,93 @@
   white-space: nowrap;
 }
 
+.my-group__edit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
 .my-group__edit-icon {
   width: 18px;
   height: 18px;
   object-fit: contain;
+}
+
+.my-group__title-input {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 8px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  color: var(--dark-blue);
+}
+
+.member-card__delete {
+  padding: 0;
+  border: none;
+  background: none;
   cursor: pointer;
+  flex-shrink: 0;
+}
+
+.invite-member-form {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.invite-member-form__input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--white);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--dark-blue);
+}
+
+.invite-member-form__submit {
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--pink);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--dark-blue);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.invite-member-form__submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.invite-member-form__input--error {
+  outline: 2px solid var(--red);
+  outline-offset: -2px;
+}
+
+.invite-member-form__hint {
+  margin: -16px 0 0;
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--red);
 }
 
 /* ── Invitation Code ─────────────────────────────────────────────────────── */
@@ -67,12 +149,23 @@
   padding: 0;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  min-width: 72px;
 }
 
 .invitation-code-box__copy-icon {
   width: 16px;
   height: 16px;
   object-fit: contain;
+}
+
+.invitation-code-box__copied {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--dark-blue);
+  white-space: nowrap;
 }
 
 /* ── Members List ────────────────────────────────────────────────────────── */

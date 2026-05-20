@@ -3,6 +3,9 @@
  * Note: Figma CDN URLs expire after 7 days. Re-export from Figma if images stop loading.
  */
 
+import iconCopy from './assets/copy.svg'
+import iconBackArrow from './assets/back-arrow.svg'
+
 // ── Status Bar ────────────────────────────────────────────────────────────────
 export const ICON_SIGNAL  = 'https://www.figma.com/api/mcp/asset/47ec0461-fca4-4001-8edf-672961389633'
 export const ICON_WIFI    = 'https://www.figma.com/api/mcp/asset/bdc48cb5-63ce-4d7d-bfc2-6e7049a284a6'
@@ -19,7 +22,7 @@ export const NAV_MENU     = 'https://www.figma.com/api/mcp/asset/a3d0583a-e625-4
 export const LOGO = 'https://www.figma.com/api/mcp/asset/ac4dff9c-36f7-4719-9df0-e0ad32901c67'
 
 // ── Shared UI ─────────────────────────────────────────────────────────────────
-export const BACK_ARROW = 'https://www.figma.com/api/mcp/asset/4d796188-123e-484c-ad70-41337f764009'
+export const BACK_ARROW = iconBackArrow
 
 // ── Create Group Screen ───────────────────────────────────────────────────────
 export const BTN_CREATE_BG = 'https://www.figma.com/api/mcp/asset/e9bb3cfb-ba46-483f-a526-0e542554ae4c'
@@ -27,7 +30,7 @@ export const BTN_JOIN_BG   = 'https://www.figma.com/api/mcp/asset/f196e89d-f4be-
 
 // ── My Group Screen ───────────────────────────────────────────────────────────
 export const ICON_EDIT     = 'https://www.figma.com/api/mcp/asset/85b3d4b6-ba27-4237-8dae-f94b05618b89'
-export const ICON_COPY     = 'https://www.figma.com/api/mcp/asset/32f44e1e-5c4f-402c-8832-55028a207975'
+export const ICON_COPY     = iconCopy
 export const AVATAR_ADMIN  = 'https://www.figma.com/api/mcp/asset/cc4adce5-796b-446e-9c5e-78eee9970c0f'
 export const AVATAR_MEMBER = 'https://www.figma.com/api/mcp/asset/0443ee1d-df75-4c21-a8e9-f913a6e67ef9'
 export const ICON_LEAVE    = 'https://www.figma.com/api/mcp/asset/f610e0d6-ee7b-47e7-b56e-de2dd4651408'

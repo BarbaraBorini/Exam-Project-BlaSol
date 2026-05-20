@@ -7,9 +7,11 @@
   top: 56px;
   left: 24px;
   right: 24px;
+  bottom: 94px;
   display: flex;
   flex-direction: column;
   gap: 24px;
+  overflow-y: auto;
 }
 
 .create-group__title {
@@ -28,47 +30,257 @@
   color: var(--dark-grey);
 }
 
-.join-create-buttons {
+.create-group__accordions {
   display: flex;
   flex-direction: column;
   gap: 24px;
   width: 100%;
 }
 
-.hex-button {
+/* ── Ribbon accordion ────────────────────────────────────────────────────── */
+.group-accordion {
   position: relative;
   width: 100%;
-  height: 112px;
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.hex-button__bg {
+.group-accordion__bg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: fill;
+  pointer-events: none;
+  z-index: 0;
 }
 
-.hex-button__label {
-  position: absolute;
-  inset: 0;
+.group-accordion__header {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 112px;
+  padding: 0 32px 0 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.group-accordion__title {
   font-family: var(--font-display);
   font-size: 24px;
   line-height: 1.1;
-  text-align: center;
+  text-align: left;
 }
 
-.hex-button--primary .hex-button__label {
+.group-accordion--create .group-accordion__title {
   color: var(--white);
 }
 
-.hex-button--secondary .hex-button__label {
+.group-accordion--join .group-accordion__title {
   color: var(--dark-blue);
+}
+
+.group-accordion__chevron {
+  width: 12px;
+  height: 28px;
+  object-fit: contain;
+  flex-shrink: 0;
+  transform: rotate(90deg);
+  transition: transform 0.25s ease;
+}
+
+.group-accordion--create .group-accordion__chevron {
+  filter: brightness(0) invert(1);
+}
+
+.group-accordion--join .group-accordion__chevron {
+  filter: brightness(0.4) sepia(1) hue-rotate(190deg) saturate(4);
+}
+
+.group-accordion--open .group-accordion__chevron {
+  transform: rotate(-90deg);
+}
+
+.group-accordion__panel {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: 0fr;
+  min-height: 0;
+  transition: grid-template-rows 0.25s ease;
+}
+
+.group-accordion--open .group-accordion__panel {
+  grid-template-rows: 1fr;
+}
+
+.group-accordion__panel-inner {
+  overflow: hidden;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 28px;
+}
+
+.group-accordion--open .group-accordion__panel-inner {
+  padding-bottom: 24px;
+}
+
+/* ── Form fields inside accordions ───────────────────────────────────────── */
+.group-form__label {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--white);
+}
+
+.group-accordion--join .group-form__label {
+  color: var(--dark-blue);
+}
+
+.group-form__input {
+  width: 100%;
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--white);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--dark-blue);
+}
+
+.group-form__input::placeholder {
+  color: var(--dark-grey);
+  opacity: 0.6;
+}
+
+.group-form__add-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--light-blue);
+  cursor: pointer;
+}
+
+.group-form__add-more-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: brightness(0.4) sepia(1) hue-rotate(190deg) saturate(4);
+}
+
+.group-form__add-more span {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--dark-blue);
+}
+
+.group-form__add-more:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.group-form__input--error {
+  outline: 2px solid var(--red);
+  outline-offset: -2px;
+}
+
+.group-form__hint {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.group-form__hint--error {
+  color: var(--red);
+}
+
+.group-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.group-form__submit {
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 8px 16px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.group-form__submit--create {
+  background: var(--pink);
+  color: var(--dark-blue);
+}
+
+.group-form__submit--create:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.group-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.group-form__email-row {
+  position: relative;
+  width: 100%;
+}
+
+.group-form__email-row .group-form__input {
+  width: 100%;
+  padding-right: 44px;
+}
+
+.group-form__email-remove {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--dark-grey);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.group-accordion--create .group-form__email-remove {
+  color: var(--dark-grey);
+}
+
+.group-accordion--create .group-form__email-remove:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.group-form__submit--join {
+  background: var(--dark-blue);
+  color: var(--white);
 }

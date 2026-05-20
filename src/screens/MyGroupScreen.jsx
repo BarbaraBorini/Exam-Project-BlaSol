@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import './MyGroupScreen.css'
 import StatusBar from '../components/StatusBar'
 import NavigationMenu from '../components/NavigationMenu'
@@ -6,46 +7,153 @@ import {
   AVATAR_ADMIN, AVATAR_MEMBER,
   ICON_LEAVE, ICON_DELETE, ICON_ADD,
 } from '../assets'
+import { isEmailInMembers } from '../groupUtils'
 
-const GROUP_MEMBERS = [
-  { id: 1, name: 'Mette', email: 'mette.s@gmail.com',   isAdmin: true,  avatar: AVATAR_ADMIN  },
-  { id: 2, name: 'Stinne', email: 'stinne.s@gmail.com', isAdmin: false, avatar: AVATAR_MEMBER },
-  { id: 3, name: 'Sofie',  email: 'sofie.123@gmail.com', isAdmin: false, avatar: AVATAR_MEMBER },
-  { id: 4, name: 'Maria',  email: 'maria.gz3@gmail.com', isAdmin: false, avatar: AVATAR_MEMBER },
-]
-
-function MemberCard({ member }) {
+function MemberCard({ member, onRemove }) {
   return (
     <div className={`member-card ${member.isAdmin ? 'member-card--admin' : 'member-card--member'}`}>
       <div className="member-card__info">
         <img src={member.avatar} alt="" className="member-card__avatar" />
         <div className="member-card__details">
           <span className="member-card__name">{member.name}</span>
-          <span className="member-card__email">{member.email}</span>
+          {member.email ? (
+            <span className="member-card__email">{member.email}</span>
+          ) : null}
         </div>
       </div>
 
       {member.isAdmin ? (
         <>
           <span className="member-card__admin-badge">ADMIN</span>
-          <button className="member-card__action" aria-label="Leave group">
+          <button type="button" className="member-card__action" aria-label="Leave group">
             <img src={ICON_LEAVE} alt="" className="member-card__action-icon" />
           </button>
         </>
       ) : (
-        <img src={ICON_DELETE} alt="Remove member" className="member-card__delete-icon" />
+        <button
+          type="button"
+          className="member-card__delete"
+          onClick={() => onRemove(member.id)}
+          aria-label={`Remove ${member.name}`}
+        >
+          <img src={ICON_DELETE} alt="" className="member-card__delete-icon" />
+        </button>
       )}
     </div>
   )
 }
 
-export default function MyGroupScreen({ onNavigate }) {
+function GroupNameHeader({ name, onNameChange }) {
+  const [isEditing, setIsEditing] = useState(false)
+  const [draft, setDraft] = useState(name)
+
+  useEffect(() => {
+    setDraft(name)
+  }, [name])
+
+  function saveName() {
+    const trimmed = draft.trim()
+    if (trimmed) onNameChange(trimmed)
+    else setDraft(name)
+    setIsEditing(false)
+  }
+
+  return (
+    <div className="my-group__header">
+      {isEditing ? (
+        <input
+          type="text"
+          className="my-group__title-input"
+          value={draft}
+          onChange={e => setDraft(e.target.value)}
+          onBlur={saveName}
+          onKeyDown={e => {
+            if (e.key === 'Enter') saveName()
+            if (e.key === 'Escape') {
+              setDraft(name)
+              setIsEditing(false)
+            }
+          }}
+          autoFocus
+          aria-label="Group name"
+        />
+      ) : (
+        <h1 className="my-group__title">{name}</h1>
+      )}
+      <button
+        type="button"
+        className="my-group__edit-btn"
+        onClick={() => setIsEditing(true)}
+        aria-label="Edit group name"
+      >
+        <img src={ICON_EDIT} alt="" className="my-group__edit-icon" />
+      </button>
+    </div>
+  )
+}
+
+export default function MyGroupScreen({
+  onNavigate,
+  group,
+  onGroupNameChange,
+  onAddMember,
+  onRemoveMember,
+}) {
+  const [inviteEmail, setInviteEmail] = useState('')
+  const [showInviteForm, setShowInviteForm] = useState(false)
+  const [copied, setCopied] = useState(false)
+
+  useEffect(() => {
+    setCopied(false)
+  }, [group.invitationCode])
+
+  useEffect(() => {
+    if (!copied) return
+    const timer = setTimeout(() => setCopied(false), 2000)
+    return () => clearTimeout(timer)
+  }, [copied])
+
+  const members = group.members.map(member => ({
+    ...member,
+    avatar: member.isAdmin ? AVATAR_ADMIN : AVATAR_MEMBER,
+  }))
+
+  const inviteIsDuplicate = isEmailInMembers(inviteEmail, group.members)
+
+  async function handleCopyCode() {
+    try {
+      await navigator.clipboard.writeText(group.invitationCode)
+      setCopied(true)
+    } catch {
+      const textarea = document.createElement('textarea')
+      textarea.value = group.invitationCode
+      textarea.setAttribute('readonly', '')
+      textarea.style.position = 'absolute'
+      textarea.style.left = '-9999px'
+      document.body.appendChild(textarea)
+      textarea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textarea)
+      setCopied(true)
+    }
+  }
+
+  function handleAddInvite(event) {
+    event.preventDefault()
+    const trimmed = inviteEmail.trim()
+    if (!trimmed || inviteIsDuplicate) return
+    onAddMember(trimmed)
+    setInviteEmail('')
+    setShowInviteForm(false)
+  }
+
   return (
     <div className="screen my-group-screen">
       <StatusBar />
 
       <div className="my-group__content">
         <button
+          type="button"
           className="back-arrow"
           onClick={() => onNavigate('map')}
           aria-label="Go back"
@@ -53,21 +161,23 @@ export default function MyGroupScreen({ onNavigate }) {
           <img src={BACK_ARROW} alt="" className="back-arrow__img" />
         </button>
 
-        <div className="my-group__header">
-          <h1 className="my-group__title">My Group</h1>
-          <img src={ICON_EDIT} alt="Edit group name" className="my-group__edit-icon" />
-        </div>
+        <GroupNameHeader name={group.name} onNameChange={onGroupNameChange} />
 
         <div className="invitation-section">
           <span className="section-label">Invitation code</span>
           <div className="invitation-code-box">
-            <span className="invitation-code-box__code">ABC123</span>
+            <span className="invitation-code-box__code">{group.invitationCode}</span>
             <button
+              type="button"
               className="invitation-code-box__copy"
-              onClick={() => navigator.clipboard?.writeText('ABC123')}
-              aria-label="Copy invitation code"
+              onClick={handleCopyCode}
+              aria-label={copied ? 'Copied to clipboard' : 'Copy invitation code'}
             >
-              <img src={ICON_COPY} alt="" className="invitation-code-box__copy-icon" />
+              {copied ? (
+                <span className="invitation-code-box__copied">Copied!</span>
+              ) : (
+                <img src={ICON_COPY} alt="" className="invitation-code-box__copy-icon" />
+              )}
             </button>
           </div>
         </div>
@@ -75,11 +185,49 @@ export default function MyGroupScreen({ onNavigate }) {
         <div className="members-section">
           <span className="section-label">Group members</span>
 
-          {GROUP_MEMBERS.map(member => (
-            <MemberCard key={member.id} member={member} />
+          {members.map(member => (
+            <MemberCard
+              key={member.id}
+              member={member}
+              onRemove={memberId => {
+                onRemoveMember(memberId)
+                setShowInviteForm(false)
+                setInviteEmail('')
+              }}
+            />
           ))}
 
-          <button className="add-more-btn">
+          {showInviteForm && (
+            <form className="invite-member-form" onSubmit={handleAddInvite}>
+              <input
+                type="email"
+                className={`invite-member-form__input${inviteIsDuplicate ? ' invite-member-form__input--error' : ''}`}
+                value={inviteEmail}
+                onChange={e => setInviteEmail(e.target.value)}
+                placeholder="email@example.com"
+                required
+                aria-label="Email to invite"
+                aria-invalid={inviteIsDuplicate}
+              />
+              <button
+                type="submit"
+                className="invite-member-form__submit"
+                disabled={!inviteEmail.trim() || inviteIsDuplicate}
+              >
+                Invite
+              </button>
+            </form>
+          )}
+
+          {showInviteForm && inviteIsDuplicate && (
+            <p className="invite-member-form__hint">This email is already in the group.</p>
+          )}
+
+          <button
+            type="button"
+            className="add-more-btn"
+            onClick={() => setShowInviteForm(true)}
+          >
             <img src={ICON_ADD} alt="" className="add-more-btn__icon" />
             <span className="add-more-btn__label">Add more</span>
           </button>
