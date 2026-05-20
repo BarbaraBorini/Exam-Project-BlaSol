@@ -1,10 +1,13 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import LoadingScreen    from './screens/LoadingScreen'
 import MapPage          from './screens/MapPage'
 import CreateGroupScreen from './screens/CreateGroupScreen'
 import MyGroupScreen    from './screens/MyGroupScreen'
 import { createGroupFromForm, isEmailInMembers, nameFromEmail } from './groupUtils'
+import { loadGroupState, saveGroupState } from './groupStorage'
+
+const savedGroupState = loadGroupState()
 
 const ROUTE_MAP = {
   start:          'map',
@@ -18,9 +21,15 @@ const ROUTE_MAP = {
 
 export default function App() {
   const [screen, setScreen] = useState('loading')
-  const [groupBannerExpanded, setGroupBannerExpanded] = useState(true)
-  const [group, setGroup] = useState(null)
-  const [hasCreatedGroup, setHasCreatedGroup] = useState(false)
+  const [groupBannerExpanded, setGroupBannerExpanded] = useState(
+    savedGroupState.groupBannerExpanded,
+  )
+  const [group, setGroup] = useState(savedGroupState.group)
+  const [hasCreatedGroup, setHasCreatedGroup] = useState(savedGroupState.hasCreatedGroup)
+
+  useEffect(() => {
+    saveGroupState({ group, hasCreatedGroup, groupBannerExpanded })
+  }, [group, hasCreatedGroup, groupBannerExpanded])
 
   function handleNavigate(target) {
     setScreen(ROUTE_MAP[target] ?? target)
