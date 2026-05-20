@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import './MapPage.css'
 import StatusBar from '../components/StatusBar'
 import NavigationMenu from '../components/NavigationMenu'
@@ -23,15 +24,33 @@ import {
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
+const GROUP_BANNER_DESCRIPTION =
+  'When you and your friends join a group, you are able to see each other\u2019s location on the map and set a meetup point for the group.'
+
 function GroupBanner({ onJoin }) {
+  const [expanded, setExpanded] = useState(true)
+
   return (
-    <div className="group-banner">
-      <button className="group-banner__join-btn" onClick={onJoin}>
-        <img src={ICON_BANNER_GROUP} alt="" className="group-banner__people-icon" />
-        <span className="group-banner__text">Join or create group</span>
-      </button>
-      <div className="group-banner__chevron">
-        <img src={ICON_CHEVRON_DOWN} alt="" className="group-banner__chevron-icon" />
+    <div className={`group-banner${expanded ? ' group-banner--expanded' : ''}`}>
+      <div className="group-banner__header">
+        <button type="button" className="group-banner__join-btn" onClick={onJoin}>
+          <img src={ICON_BANNER_GROUP} alt="" className="group-banner__people-icon" />
+          <span className="group-banner__text">Join or create group</span>
+        </button>
+        <button
+          type="button"
+          className="group-banner__toggle"
+          onClick={() => setExpanded(prev => !prev)}
+          aria-expanded={expanded}
+          aria-label={expanded ? 'Collapse group info' : 'Expand group info'}
+        >
+          <img src={ICON_CHEVRON_DOWN} alt="" className="group-banner__chevron-icon" />
+        </button>
+      </div>
+      <div className="group-banner__panel" aria-hidden={!expanded}>
+        <div className="group-banner__panel-inner">
+          <p className="group-banner__description">{GROUP_BANNER_DESCRIPTION}</p>
+        </div>
       </div>
     </div>
   )
@@ -90,11 +109,6 @@ export default function MapPage({ onNavigate }) {
     <div className="screen map-screen">
       <StatusBar />
 
-      <div className="map-section-header">
-        <GroupBanner onJoin={() => onNavigate('create-group')} />
-        <FilterBar />
-      </div>
-
       <div className="map-container">
         {/*
           Map.svg already contains:
@@ -129,6 +143,13 @@ export default function MapPage({ onNavigate }) {
         <MapItem type="merch" icon={iconMerch} label="MERCH"           left={253} top={338} />
         <MapItem type="vand"  icon={iconVand}  label="VAND"            left={164} top={155} />
         <MapItem type="food"  icon={iconFood}  label={'SPISE\nOMRÅDE'} left={278} top={484} multiLine />
+      </div>
+
+      <div className="map-overlays">
+        <GroupBanner onJoin={() => onNavigate('create-group')} />
+        <div className="map-filter-bar">
+          <FilterBar />
+        </div>
       </div>
 
       <NavigationMenu activeTab="map" onNavigate={onNavigate} />
