@@ -1,0 +1,244 @@
+{
+  "name": "Blå Sol Design System",
+  "version": "1.0.0",
+  "description": "Design tokens for the Blå Sol festival mobile app",
+  "colors": {
+    "darkBlue": "#26448c",
+    "baseGrey": "#d9dee2",
+    "white": "#f8f8ff",
+    "darkGrey": "#3a3a3a",
+    "pink": "#f3b0cd",
+    "lightBlue": "#96d4e5",
+    "blue": "#009ad5",
+    "yellow": "#ffdd4a",
+    "green": "#49ab57",
+    "orange": "#eb6635",
+    "red": "#e42e31"
+  },
+  "typography": {
+    "fonts": {
+      "display": "Bowlby One",
+      "body": "Poppins",
+      "system": "Inter, system-ui, sans-serif"
+    },
+    "sizes": {
+      "xs": "10px",
+      "sm": "12px",
+      "base": "16px",
+      "lg": "24px"
+    },
+    "weights": {
+      "regular": 400,
+      "medium": 500,
+      "bold": 700
+    },
+    "lineHeights": {
+      "none": 1,
+      "tight": 1.1,
+      "normal": 1.4,
+      "heading": "32px"
+    },
+    "letterSpacing": {
+      "navLabel": "-0.42px",
+      "body": "-0.24px",
+      "caption": "-0.18px"
+    },
+    "styles": {
+      "pageTitle": {
+        "fontFamily": "Poppins",
+        "fontWeight": 700,
+        "fontSize": "24px",
+        "lineHeight": "32px"
+      },
+      "pageText": {
+        "fontFamily": "Poppins",
+        "fontWeight": 400,
+        "fontSize": "12px",
+        "lineHeight": "1.4"
+      },
+      "displayHeading": {
+        "fontFamily": "Bowlby One",
+        "fontWeight": 400,
+        "fontSize": "24px",
+        "lineHeight": "1.1"
+      },
+      "bodyMedium": {
+        "fontFamily": "Poppins",
+        "fontWeight": 500,
+        "fontSize": "16px",
+        "lineHeight": "1.4"
+      },
+      "bodyRegular": {
+        "fontFamily": "Poppins",
+        "fontWeight": 400,
+        "fontSize": "16px",
+        "lineHeight": "1.4"
+      },
+      "navLabel": {
+        "fontFamily": "Poppins",
+        "fontWeight": 500,
+        "fontSize": "12px",
+        "lineHeight": "1.1",
+        "letterSpacing": "-0.42px"
+      },
+      "mapLabel": {
+        "fontFamily": "Bowlby One",
+        "fontWeight": 400,
+        "fontSize": "12px",
+        "lineHeight": "1.1",
+        "textTransform": "uppercase"
+      },
+      "adminBadge": {
+        "fontFamily": "Poppins",
+        "fontWeight": 500,
+        "fontSize": "10px"
+      }
+    }
+  },
+  "spacing": {
+    "xxs": "4px",
+    "xs": "8px",
+    "sm": "16px",
+    "md": "24px",
+    "lg": "32px"
+  },
+  "borderRadius": {
+    "sm": "4px",
+    "md": "8px",
+    "lg": "16px",
+    "pill": "20px",
+    "circle": "9999px"
+  },
+  "shadows": {
+    "personIcon": "2px 2px 0px #26448c"
+  },
+  "screens": {
+    "mobile": {
+      "width": "430px",
+      "height": "932px"
+    }
+  },
+  "components": {
+    "statusBar": {
+      "height": "44px",
+      "paddingTop": "16px",
+      "paddingBottom": "8px",
+      "paddingInline": "32px",
+      "timeColor": "darkBlue",
+      "iconSize": "20px"
+    },
+    "navigationMenu": {
+      "height": "94px",
+      "tabs": ["Start", "Program", "Map", "Artister", "Menu"],
+      "activeColor": "darkBlue",
+      "inactiveColor": "#7688b2",
+      "background": "pink (wave shape)",
+      "gap": "31px"
+    },
+    "button": {
+      "primary": {
+        "background": "darkBlue",
+        "textColor": "white",
+        "fontFamily": "Bowlby One",
+        "fontSize": "24px",
+        "height": "112px",
+        "shape": "hexagon (SVG)"
+      },
+      "secondary": {
+        "background": "lightBlue",
+        "textColor": "darkBlue",
+        "fontFamily": "Bowlby One",
+        "fontSize": "24px",
+        "height": "112px",
+        "shape": "hexagon (SVG)"
+      }
+    },
+    "memberCard": {
+      "borderRadius": "8px",
+      "paddingBlock": "14px",
+      "paddingInline": "16px",
+      "admin": {
+        "background": "darkBlue",
+        "textColor": "white"
+      },
+      "member": {
+        "background": "lightBlue",
+        "textColor": "darkGrey"
+      },
+      "avatarSize": "32px",
+      "actionButtonSize": "39px",
+      "actionButtonBackground": "white",
+      "actionButtonBorderRadius": "50%"
+    },
+    "invitationCode": {
+      "background": "pink",
+      "borderRadius": "8px",
+      "paddingBlock": "8px",
+      "paddingInline": "16px",
+      "textColor": "darkBlue",
+      "fontSize": "16px"
+    },
+    "addMoreButton": {
+      "background": "darkBlue",
+      "textColor": "white",
+      "borderRadius": "4px",
+      "padding": "8px 16px",
+      "iconSize": "18px"
+    },
+    "mapItem": {
+      "borderRadius": "8px",
+      "paddingBlock": "4px",
+      "paddingInline": "8px",
+      "iconSize": "24px",
+      "labelStyle": "mapLabel",
+      "types": {
+        "bar": { "background": "yellow", "textColor": "darkBlue" },
+        "wc": { "background": "blue", "textColor": "white" },
+        "merch": { "background": "yellow", "textColor": "darkBlue" },
+        "vand": { "background": "lightBlue", "textColor": "darkBlue" },
+        "stage": { "background": "darkBlue", "textColor": "white" },
+        "food": { "background": "yellow", "textColor": "darkBlue" }
+      }
+    },
+    "filterBar": {
+      "background": "darkBlue",
+      "borderRadius": "8px",
+      "padding": "4px",
+      "pill": {
+        "active": { "background": "pink", "textColor": "darkBlue" },
+        "inactive": { "background": "darkBlue", "textColor": "white" },
+        "borderRadius": "4px",
+        "padding": "4px 8px",
+        "fontSize": "16px"
+      }
+    },
+    "groupBanner": {
+      "background": "lightBlue",
+      "paddingBlock": "16px",
+      "paddingInline": "24px",
+      "button": {
+        "background": "darkBlue",
+        "textColor": "white",
+        "borderRadius": "8px",
+        "padding": "8px"
+      }
+    },
+    "personIcon": {
+      "background": "pink",
+      "textColor": "darkBlue",
+      "borderRadius": "16px",
+      "size": "32px",
+      "shadow": "shadows.personIcon",
+      "nameTag": {
+        "background": "darkBlue",
+        "textColor": "pink",
+        "borderRadius": "4px"
+      }
+    },
+    "meetupMarker": {
+      "opacity": 0,
+      "nameTagBackground": "darkBlue",
+      "nameTagTextColor": "pink"
+    }
+  }
+}
