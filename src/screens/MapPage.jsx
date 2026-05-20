@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './MapPage.css'
 import StatusBar from '../components/StatusBar'
 import NavigationMenu from '../components/NavigationMenu'
@@ -31,9 +30,7 @@ import {
 const GROUP_BANNER_DESCRIPTION =
   'When you and your friends join a group, you are able to see each other\u2019s location on the map and set a meetup point for the group.'
 
-function GroupBanner({ onJoin }) {
-  const [expanded, setExpanded] = useState(true)
-
+function GroupBanner({ expanded, onExpandedChange, onJoin }) {
   return (
     <div className={`group-banner${expanded ? ' group-banner--expanded' : ''}`}>
       <div className="group-banner__header">
@@ -44,7 +41,7 @@ function GroupBanner({ onJoin }) {
         <button
           type="button"
           className="group-banner__toggle"
-          onClick={() => setExpanded(prev => !prev)}
+          onClick={() => onExpandedChange(prev => !prev)}
           aria-expanded={expanded}
           aria-label={expanded ? 'Collapse group info' : 'Expand group info'}
         >
@@ -108,7 +105,12 @@ function StageItem({ bg, label, left, top, width, height, rotate }) {
 
 // ── Map Page ──────────────────────────────────────────────────────────────────
 
-export default function MapPage({ onNavigate }) {
+export default function MapPage({
+  onNavigate,
+  groupBannerExpanded,
+  onGroupBannerExpandedChange,
+  onJoinGroup,
+}) {
   return (
     <div className="screen map-screen">
       <StatusBar />
@@ -150,7 +152,11 @@ export default function MapPage({ onNavigate }) {
       </div>
 
       <div className="map-overlays">
-        <GroupBanner onJoin={() => onNavigate('create-group')} />
+        <GroupBanner
+          expanded={groupBannerExpanded}
+          onExpandedChange={onGroupBannerExpandedChange}
+          onJoin={onJoinGroup}
+        />
         <div className="map-filter-bar">
           <FilterBar />
         </div>

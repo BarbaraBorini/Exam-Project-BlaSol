@@ -17,15 +17,28 @@ const ROUTE_MAP = {
 
 export default function App() {
   const [screen, setScreen] = useState('loading')
+  const [groupBannerExpanded, setGroupBannerExpanded] = useState(true)
 
   function handleNavigate(target) {
     setScreen(ROUTE_MAP[target] ?? target)
   }
 
+  function handleJoinGroup() {
+    setGroupBannerExpanded(false)
+    handleNavigate('create-group')
+  }
+
   return (
     <div className="phone-frame">
       {screen === 'loading'      && <LoadingScreen     onDone={() => setScreen('map')} />}
-      {screen === 'map'          && <MapPage           onNavigate={handleNavigate} />}
+      {screen === 'map'          && (
+        <MapPage
+          onNavigate={handleNavigate}
+          groupBannerExpanded={groupBannerExpanded}
+          onGroupBannerExpandedChange={setGroupBannerExpanded}
+          onJoinGroup={handleJoinGroup}
+        />
+      )}
       {screen === 'create-group' && <CreateGroupScreen onNavigate={handleNavigate} />}
       {screen === 'my-group'     && <MyGroupScreen     onNavigate={handleNavigate} />}
     </div>
