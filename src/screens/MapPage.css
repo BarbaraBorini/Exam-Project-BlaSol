@@ -1,0 +1,237 @@
+.map-screen {
+  background: var(--base-grey);
+}
+
+/* ── Map Section Header ──────────────────────────────────────────────────── */
+.map-section-header {
+  position: absolute;
+  top: 56px;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── Group Banner ────────────────────────────────────────────────────────── */
+.group-banner {
+  background: var(--light-blue);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.group-banner__join-btn {
+  background: var(--dark-blue);
+  border-radius: var(--radius-md);
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  border: none;
+}
+
+.group-banner__people-icon {
+  width: 28px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.group-banner__text {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--white);
+  letter-spacing: -0.18px;
+  white-space: nowrap;
+}
+
+.group-banner__chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.group-banner__chevron-icon {
+  width: 12px;
+  height: 28px;
+  object-fit: contain;
+  transform: rotate(90deg) scaleY(-1);
+}
+
+/* ── Filter Bar ──────────────────────────────────────────────────────────── */
+.filter-bar {
+  background: var(--dark-blue);
+  border-radius: var(--radius-md);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  align-self: center;
+  margin: 0 auto;
+  width: fit-content;
+}
+
+.filter-bar__label {
+  background: var(--dark-blue);
+  border-radius: var(--radius-sm);
+  height: 24px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.filter-bar__filter-icon {
+  width: 13px;
+  height: 15px;
+  object-fit: contain;
+}
+
+.filter-bar__filter-text {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--white);
+  letter-spacing: -0.24px;
+  white-space: nowrap;
+}
+
+.filter-pill {
+  background: var(--pink);
+  border-radius: var(--radius-sm);
+  height: 24px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+}
+
+.filter-pill__text {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--dark-blue);
+  letter-spacing: -0.24px;
+  white-space: nowrap;
+}
+
+/* ── Map Container ───────────────────────────────────────────────────────── */
+.map-container {
+  position: absolute;
+  top: 126px;
+  left: 0;
+  right: 0;
+  height: 731px;
+  overflow: hidden;
+}
+
+.map-bg-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Map Items ───────────────────────────────────────────────────────────── */
+.map-item {
+  position: absolute;
+  border-radius: var(--radius-md);
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.map-item--bar   { background: var(--yellow); }
+.map-item--wc    { background: var(--blue); }
+.map-item--merch { background: var(--yellow); }
+.map-item--vand  { background: var(--light-blue); }
+.map-item--food  { background: var(--yellow); }
+
+.map-item__icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.map-item__label {
+  font-family: var(--font-display);
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: -0.18px;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.map-item--bar .map-item__label,
+.map-item--merch .map-item__label,
+.map-item--vand .map-item__label,
+.map-item--food .map-item__label {
+  color: var(--dark-blue);
+}
+
+.map-item--wc .map-item__label {
+  color: var(--white);
+}
+
+/* ── Stage Items ─────────────────────────────────────────────────────────── */
+.stage-item {
+  position: absolute;
+}
+
+.stage-item__bg {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+.stage-item__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.stage-item__icon {
+  width: 25px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.stage-item__label {
+  font-family: var(--font-display);
+  font-size: 12px;
+  line-height: 1.1;
+  letter-spacing: -0.18px;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--white);
+  white-space: nowrap;
+}
+
+/* ── You marker ──────────────────────────────────────────────────────────── */
+.you-marker {
+  position: absolute;
+  background: var(--pink);
+  border-radius: 50%;
+  padding: 4px 10px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 11px;
+  color: var(--dark-blue);
+  box-shadow: 2px 2px 0px var(--dark-blue);
+  white-space: nowrap;
+  pointer-events: none;
+}

@@ -1,0 +1,191 @@
+.my-group-screen {
+  background: var(--base-grey);
+}
+
+.my-group__content {
+  position: absolute;
+  top: 56px;
+  left: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 110px;
+  overflow-y: auto;
+  max-height: calc(var(--screen-h) - 56px);
+}
+
+.my-group__header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.my-group__title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  color: var(--dark-blue);
+  white-space: nowrap;
+}
+
+.my-group__edit-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+/* ── Invitation Code ─────────────────────────────────────────────────────── */
+.invitation-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.invitation-code-box {
+  background: var(--pink);
+  border-radius: var(--radius-md);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.invitation-code-box__code {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--dark-blue);
+}
+
+.invitation-code-box__copy {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.invitation-code-box__copy-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+/* ── Members List ────────────────────────────────────────────────────────── */
+.members-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.member-card {
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.member-card--admin  { background: var(--dark-blue); color: var(--white); }
+.member-card--member { background: var(--light-blue); color: var(--dark-grey); }
+
+.member-card__info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.member-card__avatar {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.member-card__details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.member-card__name {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.member-card__email {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.1;
+  letter-spacing: -0.18px;
+}
+
+.member-card__admin-badge {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 10px;
+  color: var(--white);
+  white-space: nowrap;
+}
+
+.member-card__action {
+  width: 39px;
+  height: 39px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--white);
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.member-card__action-icon {
+  width: 23px;
+  height: 23px;
+  object-fit: contain;
+}
+
+.member-card__delete-icon {
+  width: 39px;
+  height: 39px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* ── Add More Button ─────────────────────────────────────────────────────── */
+.add-more-btn {
+  background: var(--dark-blue);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.add-more-btn__icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.add-more-btn__label {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--white);
+  letter-spacing: -0.24px;
+  white-space: nowrap;
+}

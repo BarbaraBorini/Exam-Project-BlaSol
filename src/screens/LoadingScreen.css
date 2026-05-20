@@ -1,0 +1,12 @@
+.loading-screen {
+  background: var(--base-grey);
+}
+
+.loading-screen__logo {
+  position: absolute;
+  left: 85px;
+  top: 336px;
+  width: 260px;
+  height: 260px;
+  object-fit: contain;
+}

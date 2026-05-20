@@ -1,0 +1,38 @@
+.status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px 8px;
+  height: 44px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.status-bar__time {
+  font-family: var(--font-system);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--dark-blue);
+  white-space: nowrap;
+}
+
+.status-bar__icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-bar__icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.status-bar__battery {
+  width: 19px;
+  height: 12px;
+  object-fit: contain;
+}

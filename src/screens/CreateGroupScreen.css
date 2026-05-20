@@ -1,0 +1,74 @@
+.create-group-screen {
+  background: var(--base-grey);
+}
+
+.create-group__content {
+  position: absolute;
+  top: 56px;
+  left: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.create-group__title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  color: var(--dark-blue);
+}
+
+.create-group__subtitle {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--dark-grey);
+}
+
+.join-create-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.hex-button {
+  position: relative;
+  width: 100%;
+  height: 112px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.hex-button__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+.hex-button__label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.hex-button--primary .hex-button__label {
+  color: var(--white);
+}
+
+.hex-button--secondary .hex-button__label {
+  color: var(--dark-blue);
+}
