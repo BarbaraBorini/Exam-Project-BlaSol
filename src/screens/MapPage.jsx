@@ -3,6 +3,7 @@ import './MapPage.css'
 import StatusBar from '../components/StatusBar'
 import NavigationMenu from '../components/NavigationMenu'
 import { formatMemberList } from '../groupUtils'
+import { loadMeetupPoint, saveMeetupPoint } from '../groupStorage'
 import iconGroup from '../assets/group.svg'
 import iconArrowRight from '../assets/arrow-right.svg'
 import iconEyeOpen from '../assets/eye_open.svg'
@@ -88,7 +89,7 @@ function MyGroupBar({ group, onOpenMyGroup, friendsVisible, onToggleFriends, onN
   )
 }
 
-function FriendMarkers({ members, visible }) {
+function FriendMarkers({ members, visible, selectedFriendId, onFriendClick }) {
   if (!visible) return null
 
   const friends = members.filter(member => !member.isAdmin)
@@ -96,15 +97,21 @@ function FriendMarkers({ members, visible }) {
   return friends.map((member, index) => {
     const position = FRIEND_MARKER_POSITIONS[index % FRIEND_MARKER_POSITIONS.length]
     const initial = member.name.charAt(0).toUpperCase()
+    const showName = selectedFriendId === member.id
 
     return (
-      <div
+      <button
         key={member.id}
+        type="button"
         className="friend-marker"
         style={{ left: position.left, top: position.top }}
+        onClick={e => onFriendClick(e, member.id)}
+        aria-label={`${member.name}, tap to show name`}
+        aria-expanded={showName}
       >
         <span className="friend-marker__label">{initial}</span>
-      </div>
+        {showName && <span className="friend-marker__name">{member.name}</span>}
+      </button>
     )
   })
 }
@@ -319,9 +326,10 @@ export default function MapPage({
   const [friendsVisible, setFriendsVisible] = useState(true)
   const [meetupMode, setMeetupMode] = useState(null)
   const [pendingMeetupPosition, setPendingMeetupPosition] = useState(null)
-  const [meetupPoint, setMeetupPoint] = useState(null)
+  const [meetupPoint, setMeetupPoint] = useState(() => loadMeetupPoint())
   const [meetupTime, setMeetupTime] = useState('')
   const [meetupTimeVisible, setMeetupTimeVisible] = useState(false)
+  const [selectedFriendId, setSelectedFriendId] = useState(null)
   const mapContainerRef = useRef(null)
   const meetupModeRef = useRef(meetupMode)
   const lastMapClickRef = useRef(null)
@@ -332,6 +340,10 @@ export default function MapPage({
       lastMapClickRef.current = null
     }
   }, [meetupMode])
+
+  useEffect(() => {
+    saveMeetupPoint(meetupPoint)
+  }, [meetupPoint])
 
   const handleNewMeetup = () => {
     if (meetupMode === 'placing') {
@@ -392,6 +404,11 @@ export default function MapPage({
     setMeetupTimeVisible(prev => !prev)
   }
 
+  const handleFriendClick = (e, memberId) => {
+    e.stopPropagation()
+    setSelectedFriendId(prev => (prev === memberId ? null : memberId))
+  }
+
   return (
     <div className="screen map-screen">
       <StatusBar />
@@ -432,7 +449,12 @@ export default function MapPage({
         <MapItem type="food"  icon={iconFood}  label={'SPISE\nOMRÅDE'} left={278} top={484} multiLine />
 
         {hasCreatedGroup && group && (
-          <FriendMarkers members={group.members} visible={friendsVisible} />
+          <FriendMarkers
+            members={group.members}
+            visible={friendsVisible}
+            selectedFriendId={selectedFriendId}
+            onFriendClick={handleFriendClick}
+          />
         )}
 
         {pendingMeetupPosition && meetupMode === 'modal' && (

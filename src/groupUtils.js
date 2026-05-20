@@ -43,13 +43,27 @@ export function nameFromEmail(email) {
     .join(' ') || email
 }
 
+export function normalizeInviteCode(code) {
+  return code.trim().toUpperCase()
+}
+
+export const FIXED_INVITE_CODE = 'BLASOL'
+
 export function generateInviteCode() {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-  let code = ''
-  for (let i = 0; i < 6; i++) {
-    code += chars[Math.floor(Math.random() * chars.length)]
+  return FIXED_INVITE_CODE
+}
+
+export function getDefaultJoinableGroup() {
+  return {
+    name: 'My group',
+    invitationCode: FIXED_INVITE_CODE,
+    members: buildJoinedGroupMembers(),
   }
-  return code
+}
+
+export function withFixedInviteCode(group) {
+  if (!group) return group
+  return { ...group, invitationCode: FIXED_INVITE_CODE }
 }
 
 export function formatMemberList(members) {
@@ -58,6 +72,31 @@ export function formatMemberList(members) {
   if (labels.length === 1) return `${labels[0]}.`
   if (labels.length === 2) return `${labels[0]} and ${labels[1]}.`
   return `${labels.slice(0, -1).join(', ')} and ${labels[labels.length - 1]}.`
+}
+
+const JOINED_GROUP_MEMBERS = [
+  { name: 'Sofia', email: 'sofia@gmail.com' },
+  { name: 'Stinne', email: 'stinne.s@gmail.com' },
+  { name: 'Maria', email: 'maria.t@hotmail.com' },
+]
+
+export function buildJoinedGroupMembers() {
+  return [
+    { id: 1, name: 'You', email: '', isAdmin: true },
+    ...JOINED_GROUP_MEMBERS.map((member, index) => ({
+      id: index + 2,
+      name: member.name,
+      email: member.email,
+      isAdmin: false,
+    })),
+  ]
+}
+
+export function applyJoinedGroupMembers(group) {
+  return {
+    ...group,
+    members: buildJoinedGroupMembers(),
+  }
 }
 
 export function createGroupFromForm(groupName, emails) {

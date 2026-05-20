@@ -5,7 +5,7 @@ import MapPage          from './screens/MapPage'
 import CreateGroupScreen from './screens/CreateGroupScreen'
 import MyGroupScreen    from './screens/MyGroupScreen'
 import { createGroupFromForm, isEmailInMembers, nameFromEmail } from './groupUtils'
-import { loadGroupState, saveGroupState } from './groupStorage'
+import { loadGroupState, saveGroupState, joinGroupFromInviteCode } from './groupStorage'
 
 const savedGroupState = loadGroupState()
 
@@ -45,6 +45,17 @@ export default function App() {
     setHasCreatedGroup(true)
     setGroupBannerExpanded(false)
     handleNavigate('my-group')
+  }
+
+  function handleJoinWithCode(inviteCode) {
+    const result = joinGroupFromInviteCode(inviteCode)
+    if (!result.ok) return result
+
+    setGroup(result.group)
+    setHasCreatedGroup(true)
+    setGroupBannerExpanded(false)
+    handleNavigate('my-group')
+    return { ok: true }
   }
 
   function handleGroupNameChange(name) {
@@ -97,6 +108,7 @@ export default function App() {
         <CreateGroupScreen
           onNavigate={handleNavigate}
           onCreateGroup={handleCreateGroup}
+          onJoinGroup={handleJoinWithCode}
         />
       )}
       {screen === 'my-group'     && group && (

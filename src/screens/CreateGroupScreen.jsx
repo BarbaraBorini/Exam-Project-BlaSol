@@ -50,11 +50,12 @@ function GroupAccordion({
   )
 }
 
-export default function CreateGroupScreen({ onNavigate, onCreateGroup }) {
+export default function CreateGroupScreen({ onNavigate, onCreateGroup, onJoinGroup }) {
   const [openSection, setOpenSection] = useState(null)
   const [groupName, setGroupName] = useState('')
   const [emails, setEmails] = useState([''])
   const [inviteCode, setInviteCode] = useState('')
+  const [joinError, setJoinError] = useState('')
 
   const canAddMoreEmails = allEmailsFilled(emails) && !hasDuplicateEmails(emails)
   const canCreate =
@@ -106,6 +107,13 @@ export default function CreateGroupScreen({ onNavigate, onCreateGroup }) {
     event.preventDefault()
     if (!canCreate) return
     onCreateGroup(groupName, emails)
+  }
+
+  function handleJoin() {
+    const result = onJoinGroup(inviteCode)
+    if (!result?.ok) {
+      setJoinError(result?.error ?? 'Could not join group.')
+    }
   }
 
   return (
@@ -221,17 +229,26 @@ export default function CreateGroupScreen({ onNavigate, onCreateGroup }) {
             <input
               id="invite-code"
               type="text"
-              className="group-form__input"
+              className={`group-form__input${joinError ? ' group-form__input--error' : ''}`}
               value={inviteCode}
-              onChange={e => setInviteCode(e.target.value)}
+              onChange={e => {
+                setInviteCode(e.target.value.toUpperCase())
+                setJoinError('')
+              }}
               placeholder="Enter invitation code"
+              aria-invalid={Boolean(joinError)}
             />
+
+            {joinError && (
+              <p className="group-form__hint group-form__hint--error">{joinError}</p>
+            )}
 
             <div className="group-form__actions">
               <button
                 type="button"
                 className="group-form__submit group-form__submit--join"
-                onClick={() => onNavigate('my-group')}
+                onClick={handleJoin}
+                disabled={!inviteCode.trim()}
               >
                 Join
               </button>
