@@ -9,9 +9,20 @@ const TABS = [
   { id: 'menu',     label: 'Menu',     icon: NAV_MENU },
 ]
 
+const NAV_BAR_PATH =
+  'M44 13.5H0V94H430V0L390 7.5L279 4.5L229.5 10L134 4.5L44 13.5Z'
+
 export default function NavigationMenu({ activeTab = 'map', onNavigate }) {
   return (
-    <nav className="nav-menu">
+    <nav className="nav-menu" aria-label="Main navigation">
+      <svg
+        className="nav-menu__shape"
+        viewBox="0 0 430 94"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path d={NAV_BAR_PATH} fill="var(--pink)" />
+      </svg>
       <div className="nav-menu__tabs">
         {TABS.map(tab => (
           <button
@@ -20,7 +31,14 @@ export default function NavigationMenu({ activeTab = 'map', onNavigate }) {
             onClick={() => onNavigate?.(tab.id)}
             aria-label={tab.label}
           >
-            <img src={tab.icon} alt="" className="nav-tab__icon" />
+            <span
+              className="nav-tab__icon"
+              style={{
+                WebkitMaskImage: `url(${tab.icon})`,
+                maskImage: `url(${tab.icon})`,
+              }}
+              aria-hidden="true"
+            />
             <span className="nav-tab__label">{tab.label}</span>
           </button>
         ))}
