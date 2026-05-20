@@ -141,7 +141,7 @@ function CreateGroupScreen({ onNavigate }) {
 
         {/* Title */}
         <h1 className="create-group__title">
-          Create a group or join an existing one!
+          Create a group or join an existing one
         </h1>
 
         {/* Subtitle */}
