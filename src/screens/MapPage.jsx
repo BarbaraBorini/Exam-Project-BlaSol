@@ -15,11 +15,15 @@ import iconStage   from '../assets/stage.svg'
 import iconFood    from '../assets/food.svg'
 import iconBlasolBar from '../assets/blasol-bar.svg'
 
-// Figma CDN – stage banner backgrounds only
+// Local stage banner backgrounds
+import stageBgVidunderbla  from '../assets/Background-VIDUNDERBLÅ.svg'
+import stageBgBirkelunden  from '../assets/Background-BIRKELUNDEN.svg'
+import stageBgByfesten     from '../assets/Background-BYFESTEN.svg'
+import stageBgDragonen     from '../assets/Background-DRAGONEN.svg'
+
+// Figma CDN – map header UI icons only
 import {
   ICON_FILTER, ICON_BANNER_GROUP, ICON_CHEVRON_DOWN,
-  STAGE_BIRKELUNDEN, STAGE_BYFESTEN,
-  STAGE_VIDUNDERBLA, STAGE_DRAGONEN,
 } from '../assets'
 
 // ── Sub-components ────────────────────────────────────────────────────────────
@@ -121,10 +125,10 @@ export default function MapPage({ onNavigate }) {
         <img src={mapSvg} alt="Festival map" className="map-bg-layer" />
 
         {/* ── Stages ── */}
-        <StageItem bg={STAGE_VIDUNDERBLA} label="VIDUNDERBLÅ" left={221} top={89}  width={123} height={56} />
-        <StageItem bg={STAGE_BIRKELUNDEN} label="BIRKELUNDEN" left={-12} top={383} width={130} height={97}  rotate={23.46} />
-        <StageItem bg={STAGE_BYFESTEN}   label="BYFESTEN"    left={58}  top={560} width={105} height={80} />
-        <StageItem bg={STAGE_DRAGONEN}   label="DRAGONEN"    left={329} top={391} width={96}  height={59}  rotate={-12.69} />
+        <StageItem bg={stageBgVidunderbla} label="VIDUNDERBLÅ" left={221} top={89}  width={123} height={56} />
+        <StageItem bg={stageBgBirkelunden} label="BIRKELUNDEN" left={-12} top={383} width={130} height={97}  rotate={23.46} />
+        <StageItem bg={stageBgByfesten}   label="BYFESTEN"    left={58}  top={560} width={105} height={80} />
+        <StageItem bg={stageBgDragonen}   label="DRAGONEN"    left={329} top={391} width={96}  height={59}  rotate={-12.69} />
 
         {/* ── Bars ── */}
         <MapItem type="bar" icon={iconBar} label="BAR"            left={226} top={278} />

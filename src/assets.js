@@ -39,9 +39,4 @@ export const ICON_FILTER       = 'https://www.figma.com/api/mcp/asset/52cd29ce-c
 export const ICON_BANNER_GROUP = 'https://www.figma.com/api/mcp/asset/4535003c-613b-46b2-aa88-62c0868e27ce'
 export const ICON_CHEVRON_DOWN = 'https://www.figma.com/api/mcp/asset/53a10818-cda8-4d2c-8296-97b6d30a6046'
 
-// ── Map Page – stage banner backgrounds (Figma CDN) ──────────────────────────
-// Icons (bar, wc, merch, vand, stage, food) are imported locally from src/assets/
-export const STAGE_BIRKELUNDEN = 'https://www.figma.com/api/mcp/asset/807406a6-0b46-4676-b973-3cd9fde6c233'
-export const STAGE_BYFESTEN    = 'https://www.figma.com/api/mcp/asset/2810a967-8c8a-46b5-b973-82621de1404b'
-export const STAGE_VIDUNDERBLA = 'https://www.figma.com/api/mcp/asset/674dda06-047b-4bc5-83f2-64a155bcb49a'
-export const STAGE_DRAGONEN    = 'https://www.figma.com/api/mcp/asset/1671e867-c4be-4ce5-ae33-b5608a2af687'
+// Stage banner backgrounds are imported locally in MapPage.jsx from src/assets/Background-*.svg
