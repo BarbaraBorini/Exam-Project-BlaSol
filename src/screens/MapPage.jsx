@@ -1,11 +1,22 @@
 import './MapPage.css'
 import StatusBar from '../components/StatusBar'
 import NavigationMenu from '../components/NavigationMenu'
+
+// Local map SVG (includes background, paths, North sign, You-marker, AID icon, entrances)
+import mapSvg from '../assets/Map.svg'
+
+// Local icon SVGs
+import iconBar     from '../assets/bar.svg'
+import iconWC      from '../assets/toilets.svg'
+import iconMerch   from '../assets/merch.svg'
+import iconVand    from '../assets/water.svg'
+import iconStage   from '../assets/stage.svg'
+import iconFood    from '../assets/food.svg'
+import iconBlasolBar from '../assets/blasol-bar.svg'
+
+// Figma CDN – stage banner backgrounds only
 import {
-  MAP_BASE, MAP_OVERLAY, MAP_PATHS, MAP_PATHS2,
   ICON_FILTER, ICON_BANNER_GROUP, ICON_CHEVRON_DOWN,
-  MAP_ICON_BAR, MAP_ICON_WC, MAP_ICON_MERCH,
-  MAP_ICON_VAND, MAP_ICON_STAGE, MAP_ICON_FOOD,
   STAGE_BIRKELUNDEN, STAGE_BYFESTEN,
   STAGE_VIDUNDERBLA, STAGE_DRAGONEN,
 } from '../assets'
@@ -65,7 +76,7 @@ function StageItem({ bg, label, left, top, width, height, rotate }) {
     >
       <img src={bg} alt="" className="stage-item__bg" />
       <div className="stage-item__content">
-        <img src={MAP_ICON_STAGE} alt="" className="stage-item__icon" />
+        <img src={iconStage} alt="" className="stage-item__icon" />
         <span className="stage-item__label">{label}</span>
       </div>
     </div>
@@ -85,38 +96,39 @@ export default function MapPage({ onNavigate }) {
       </div>
 
       <div className="map-container">
-        {/* Base layers */}
-        <img src={MAP_BASE}    alt="Festival map" className="map-bg-layer" style={{ zIndex: 0 }} />
-        <img src={MAP_OVERLAY} alt=""             className="map-bg-layer" style={{ zIndex: 1 }} />
-        <img src={MAP_PATHS2}  alt=""             className="map-bg-layer" style={{ zIndex: 2, opacity: 0.8 }} />
-        <img src={MAP_PATHS}   alt=""             className="map-bg-layer" style={{ zIndex: 3, opacity: 0.6 }} />
+        {/*
+          Map.svg already contains:
+          - Map background + path fills
+          - North compass sign
+          - "You" location marker
+          - AID / first-aid icon
+          - Entrance signs (INDGANG)
+        */}
+        <img src={mapSvg} alt="Festival map" className="map-bg-layer" />
 
-        {/* Stages */}
+        {/* ── Stages ── */}
         <StageItem bg={STAGE_VIDUNDERBLA} label="VIDUNDERBLÅ" left={221} top={89}  width={123} height={56} />
         <StageItem bg={STAGE_BIRKELUNDEN} label="BIRKELUNDEN" left={-12} top={383} width={130} height={97}  rotate={23.46} />
         <StageItem bg={STAGE_BYFESTEN}   label="BYFESTEN"    left={58}  top={560} width={105} height={80} />
         <StageItem bg={STAGE_DRAGONEN}   label="DRAGONEN"    left={329} top={391} width={96}  height={59}  rotate={-12.69} />
 
-        {/* Bars */}
-        <MapItem type="bar" icon={MAP_ICON_BAR} label="BAR" left={226} top={278} />
-        <MapItem type="bar" icon={MAP_ICON_BAR} label="BAR" left={169} top={103} />
-        <MapItem type="bar" icon={MAP_ICON_BAR} label="BAR" left={82}  top={316} />
-        <MapItem type="bar" icon={MAP_ICON_BAR} label="BAR" left={123} top={510} />
-        <MapItem type="bar" icon={MAP_ICON_BAR} label={'BLÅ SOL\nBAR'} left={206} top={546} multiLine />
+        {/* ── Bars ── */}
+        <MapItem type="bar" icon={iconBar} label="BAR"            left={226} top={278} />
+        <MapItem type="bar" icon={iconBar} label="BAR"            left={169} top={103} />
+        <MapItem type="bar" icon={iconBar} label="BAR"            left={82}  top={316} />
+        <MapItem type="bar" icon={iconBar} label="BAR"            left={123} top={510} />
+        <MapItem type="bar" icon={iconBlasolBar} label={'BLÅ SOL\nBAR'} left={206} top={546} multiLine />
 
-        {/* Toilets */}
-        <MapItem type="wc" icon={MAP_ICON_WC} label="WC" left={16}  top={173} />
-        <MapItem type="wc" icon={MAP_ICON_WC} label="WC" left={204} top={228} />
-        <MapItem type="wc" icon={MAP_ICON_WC} label="WC" left={101} top={655} />
-        <MapItem type="wc" icon={MAP_ICON_WC} label="WC" left={353} top={323} />
+        {/* ── Toilets ── */}
+        <MapItem type="wc" icon={iconWC} label="WC" left={16}  top={173} />
+        <MapItem type="wc" icon={iconWC} label="WC" left={204} top={228} />
+        <MapItem type="wc" icon={iconWC} label="WC" left={101} top={655} />
+        <MapItem type="wc" icon={iconWC} label="WC" left={353} top={323} />
 
-        {/* Other */}
-        <MapItem type="merch" icon={MAP_ICON_MERCH} label="MERCH"             left={253} top={338} />
-        <MapItem type="vand"  icon={MAP_ICON_VAND}  label="VAND"              left={164} top={155} />
-        <MapItem type="food"  icon={MAP_ICON_FOOD}  label={'SPISE\nOMRÅDE'}   left={278} top={484} multiLine />
-
-        {/* User location */}
-        <div className="you-marker" style={{ left: 215, top: 200, zIndex: 12 }}>You</div>
+        {/* ── Other ── */}
+        <MapItem type="merch" icon={iconMerch} label="MERCH"           left={253} top={338} />
+        <MapItem type="vand"  icon={iconVand}  label="VAND"            left={164} top={155} />
+        <MapItem type="food"  icon={iconFood}  label={'SPISE\nOMRÅDE'} left={278} top={484} multiLine />
       </div>
 
       <NavigationMenu activeTab="map" onNavigate={onNavigate} />
