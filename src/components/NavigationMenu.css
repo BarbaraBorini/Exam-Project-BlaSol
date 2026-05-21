@@ -43,25 +43,14 @@
   padding: 4px 0;
   min-width: 50px;
   flex: 1;
-  opacity: 0.4;
   color: var(--dark-blue);
-}
-
-.nav-tab--active {
-  opacity: 1;
 }
 
 .nav-tab__icon {
   display: block;
   width: 24px;
   height: 24px;
-  background-color: var(--dark-blue);
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-  -webkit-mask-size: contain;
-  mask-size: contain;
+  object-fit: contain;
   flex-shrink: 0;
 }
 

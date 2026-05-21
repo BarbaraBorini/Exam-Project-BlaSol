@@ -67,7 +67,7 @@ export function withFixedInviteCode(group) {
 }
 
 export function formatMemberList(members) {
-  const labels = members.map(member => (member.isAdmin ? 'you' : member.name))
+  const labels = members.map(member => (member.isAdmin ? 'You' : member.name))
   if (labels.length === 0) return ''
   if (labels.length === 1) return `${labels[0]}.`
   if (labels.length === 2) return `${labels[0]} and ${labels[1]}.`

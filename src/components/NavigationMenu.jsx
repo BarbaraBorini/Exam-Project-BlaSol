@@ -31,12 +31,10 @@ export default function NavigationMenu({ activeTab = 'map', onNavigate }) {
             onClick={() => onNavigate?.(tab.id)}
             aria-label={tab.label}
           >
-            <span
+            <img
+              src={tab.icon}
               className="nav-tab__icon"
-              style={{
-                WebkitMaskImage: `url(${tab.icon})`,
-                maskImage: `url(${tab.icon})`,
-              }}
+              alt=""
               aria-hidden="true"
             />
             <span className="nav-tab__label">{tab.label}</span>

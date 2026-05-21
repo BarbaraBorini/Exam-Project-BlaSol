@@ -1,7 +1,3 @@
-/**
- * Central asset module – exports both local SVG imports and Figma CDN URLs.
- * Note: Figma CDN URLs expire after ~7 days. Re-export from Figma if remote images stop loading.
- */
 
 import iconCopy from './assets/copy.svg'
 import iconBackArrow from './assets/back-arrow.svg'
@@ -12,11 +8,11 @@ export const ICON_WIFI    = 'https://www.figma.com/api/mcp/asset/bdc48cb5-63ce-4
 export const ICON_BATTERY = 'https://www.figma.com/api/mcp/asset/8c4f777a-8920-45d0-85ea-07bfe6da1f53'
 
 // ── Navigation tab icons (background rendered with CSS) ───────────────────────
-export const NAV_HOME     = 'https://www.figma.com/api/mcp/asset/f8d69d7f-1710-4ef6-bda3-e91380431f24'
-export const NAV_PROGRAM  = 'https://www.figma.com/api/mcp/asset/3993ac21-263d-4b24-bdab-6a3005ccb7ca'
-export const NAV_MAP      = 'https://www.figma.com/api/mcp/asset/79bda032-de7e-4c95-8b17-c45d8a71ee0c'
-export const NAV_ARTISTER = 'https://www.figma.com/api/mcp/asset/e6e1979d-9276-4b78-80ee-eb42d17240bd'
-export const NAV_MENU     = 'https://www.figma.com/api/mcp/asset/a3d0583a-e625-4bf8-ad2d-3cac6c1a7df6'
+export { default as NAV_HOME } from './assets/home.svg'
+export { default as NAV_PROGRAM } from './assets/program.svg'
+export { default as NAV_MAP } from './assets/mapicon.svg'
+export { default as NAV_ARTISTER } from './assets/artister.svg'
+export { default as NAV_MENU } from './assets/menu.svg'
 
 // ── Loading Screen ────────────────────────────────────────────────────────────
 export const LOGO = 'https://www.figma.com/api/mcp/asset/ac4dff9c-36f7-4719-9df0-e0ad32901c67'
