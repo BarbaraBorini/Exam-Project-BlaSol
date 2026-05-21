@@ -10,6 +10,7 @@ import iconEyeClosed from '../assets/eye-closed.svg'
 import iconMeetup from '../assets/meetup-point.svg'
 import iconTime from '../assets/time.svg'
 
+
 // Local icon SVGs
 import iconBar     from '../assets/bar.svg'
 import iconWC      from '../assets/toilets.svg'
