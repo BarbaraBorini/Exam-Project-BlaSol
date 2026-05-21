@@ -513,13 +513,25 @@
 }
 
 .filter-bar__label {
-  background: var(--dark-blue);
+  background: none;
+  border: none;
   border-radius: var(--radius-sm);
   height: 24px;
   padding: 4px 8px;
   display: flex;
   align-items: center;
   gap: 4px;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+.filter-bar__label:hover {
+  opacity: 0.85;
+}
+
+/* Clear/reset state – shows "× Ryd" with white pill */
+.filter-bar__label--active {
+  background: var(--white);
 }
 
 .filter-bar__filter-icon {
@@ -537,24 +549,49 @@
   white-space: nowrap;
 }
 
-.filter-pill {
-  background: var(--pink);
-  border-radius: var(--radius-sm);
-  height: 24px;
-  padding: 4px 8px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  border: none;
+.filter-bar__clear-x {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--dark-blue);
+  line-height: 1;
 }
 
-.filter-pill__text {
+.filter-bar__ryd-text {
   font-family: var(--font-body);
   font-weight: 500;
   font-size: 16px;
   color: var(--dark-blue);
   letter-spacing: -0.24px;
   white-space: nowrap;
+}
+
+/* ── Filter pills ── */
+
+/* inactive (default) */
+.filter-pill {
+  background: transparent;
+  border: 1.5px solid rgba(248, 248, 255, 0.35);
+  border-radius: var(--radius-sm);
+  height: 24px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 16px;
+  color: rgba(248, 248, 255, 0.5);
+  letter-spacing: -0.24px;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+/* active */
+.filter-pill--active {
+  background: var(--pink);
+  border-color: var(--pink);
+  color: var(--dark-blue);
 }
 
 .map-bg-layer {
@@ -574,8 +611,11 @@
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  overflow: hidden;
+  overflow: visible;
 }
+
+.map-item--highlighted.map-item--bar { box-shadow: 2px 2px 0 var(--dark-blue); }
+.map-item--highlighted.map-item--wc  { box-shadow: 2px 2px 0 var(--white); }
 
 .map-item--bar   { background: var(--yellow); }
 .map-item--wc    { background: var(--blue); }
@@ -613,6 +653,7 @@
 /* ── Stage Items ─────────────────────────────────────────────────────────── */
 .stage-item {
   position: absolute;
+  overflow: visible;
 }
 
 .stage-item__bg {
@@ -648,17 +689,68 @@
   white-space: nowrap;
 }
 
-/* ── You marker ──────────────────────────────────────────────────────────── */
-.you-marker {
+/* ── Artist tag (above stage items when Scener filter is active) ─────────── */
+.artist-tag {
   position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 17px;
+  padding: 4px 8px;
   background: var(--pink);
-  border-radius: 50%;
-  padding: 4px 10px;
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 11px;
-  color: var(--dark-blue);
-  box-shadow: 2px 2px 0px var(--dark-blue);
+  border-radius: var(--radius-md);
   white-space: nowrap;
   pointer-events: none;
+  z-index: 1;
 }
+
+.artist-tag__note {
+  font-size: 10px;
+  color: var(--dark-blue);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.artist-tag__label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  line-height: 1.1;
+  color: var(--dark-blue);
+  letter-spacing: -0.15px;
+  flex-shrink: 0;
+}
+
+.artist-tag__name {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 1.1;
+  color: var(--dark-blue);
+  letter-spacing: -0.15px;
+  flex-shrink: 0;
+}
+
+/* ── Queue tag (above bar / WC items when filter is active) ──────────────── */
+.queue-tag {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 4px;
+  border-radius: var(--radius-md);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.queue-tag__person {
+  display: block;
+  flex-shrink: 0;
+}
+

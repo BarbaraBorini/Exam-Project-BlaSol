@@ -125,16 +125,7 @@ export default function MyGroupScreen({
       await navigator.clipboard.writeText(group.invitationCode)
       setCopied(true)
     } catch {
-      const textarea = document.createElement('textarea')
-      textarea.value = group.invitationCode
-      textarea.setAttribute('readonly', '')
-      textarea.style.position = 'absolute'
-      textarea.style.left = '-9999px'
-      document.body.appendChild(textarea)
-      textarea.select()
-      document.execCommand('copy')
-      document.body.removeChild(textarea)
-      setCopied(true)
+      // Clipboard API unavailable (e.g. non-secure context) – silently ignore
     }
   }
 

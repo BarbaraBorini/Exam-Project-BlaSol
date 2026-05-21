@@ -143,23 +143,99 @@ function GroupBanner({ expanded, onExpandedChange, onJoin }) {
   )
 }
 
-function FilterBar() {
+// ── Mock live data ────────────────────────────────────────────────────────────
+
+const STAGE_PROGRAMS = {
+  'VIDUNDERBLÅ': { now: 'Saveus',       next: 'Billie Marten' },
+  'BIRKELUNDEN':  { now: 'Phlake',       next: 'Soleima' },
+  'BYFESTEN':     { now: 'MØ',           next: 'Goss' },
+  'DRAGONEN':     { now: 'Lukas Graham', next: null },
+}
+
+// ── Tag sub-components ────────────────────────────────────────────────────────
+
+const PERSON_PATH = 'M3.5 0C2.12 0 1 1.12 1 2.5S2.12 5 3.5 5 6 3.88 6 2.5 4.88 0 3.5 0zm0 6C1.5 6 0 7.5 0 9v3h7V9C7 7.5 5.5 6 3.5 6z'
+
+function QueueTag({ level }) {
+  const bg = { short: 'var(--green)', medium: 'var(--orange)', long: 'var(--red)' }[level]
   return (
-    <div className="filter-bar">
-      <div className="filter-bar__label">
-        <img src={ICON_FILTER} alt="" className="filter-bar__filter-icon" />
-        <span className="filter-bar__filter-text">Filter</span>
-      </div>
-      <button className="filter-pill"><span className="filter-pill__text">Scener</span></button>
-      <button className="filter-pill"><span className="filter-pill__text">Toiletter</span></button>
-      <button className="filter-pill"><span className="filter-pill__text">Barer</span></button>
+    <div className="queue-tag" style={{ background: bg }} aria-label={`${level} queue`}>
+      {[0, 1, 2].map(i => (
+        <svg key={i} className="queue-tag__person" width="7" height="12" viewBox="0 0 7 12" aria-hidden="true">
+          <path d={PERSON_PATH} fill="white" />
+        </svg>
+      ))}
     </div>
   )
 }
 
-function MapItem({ type, icon, label, left, top, multiLine = false }) {
+function ArtistTag({ now }) {
   return (
-    <div className={`map-item map-item--${type}`} style={{ left, top, zIndex: 11 }}>
+    <div className="artist-tag" aria-label={`Now playing: ${now}`}>
+      <span className="artist-tag__note" aria-hidden="true">♪</span>
+      <span className="artist-tag__label">NOW:</span>
+      <span className="artist-tag__name">{now}</span>
+    </div>
+  )
+}
+
+// ── Filter bar ────────────────────────────────────────────────────────────────
+
+const FILTER_PILLS = [
+  { id: 'stages',  label: 'Scener'    },
+  { id: 'toilets', label: 'Toiletter' },
+  { id: 'bars',    label: 'Barer'     },
+]
+
+function FilterBar({ activeFilters, onToggle, onReset }) {
+  const anyActive = Object.values(activeFilters).some(Boolean)
+
+  return (
+    <div className="filter-bar">
+      <button
+        type="button"
+        className={`filter-bar__label${anyActive ? ' filter-bar__label--active' : ''}`}
+        onClick={onReset}
+        aria-label={anyActive ? 'Clear all filters' : 'Filters'}
+      >
+        {anyActive ? (
+          <>
+            <span className="filter-bar__clear-x" aria-hidden="true">×</span>
+            <span className="filter-bar__ryd-text">Ryd</span>
+          </>
+        ) : (
+          <>
+            <img src={ICON_FILTER} alt="" className="filter-bar__filter-icon" />
+            <span className="filter-bar__filter-text">Filter</span>
+          </>
+        )}
+      </button>
+
+      {FILTER_PILLS.map(({ id, label }) => (
+        <button
+          key={id}
+          type="button"
+          className={`filter-pill${activeFilters[id] ? ' filter-pill--active' : ''}`}
+          onClick={() => onToggle(id)}
+          aria-pressed={activeFilters[id]}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+// ── Map item components ───────────────────────────────────────────────────────
+
+function MapItem({ type, icon, label, left, top, multiLine = false, hidden = false, queue = null, highlighted = false }) {
+  if (hidden) return null
+  return (
+    <div
+      className={`map-item map-item--${type}${highlighted ? ' map-item--highlighted' : ''}`}
+      style={{ left, top, zIndex: 11 }}
+    >
+      {highlighted && queue && <QueueTag level={queue} />}
       <img src={icon} alt="" className="map-item__icon" />
       <span
         className="map-item__label"
@@ -295,7 +371,8 @@ function MeetupMarker({ left, top, time, preview = false, showTime = false, onCl
   )
 }
 
-function StageItem({ bg, label, left, top, width, height, rotate }) {
+function StageItem({ bg, label, left, top, width, height, rotate, hidden = false, nowPlaying = null, highlighted = false }) {
+  if (hidden) return null
   return (
     <div
       className="stage-item"
@@ -304,6 +381,7 @@ function StageItem({ bg, label, left, top, width, height, rotate }) {
         ...(rotate ? { transform: `rotate(${rotate}deg)` } : {}),
       }}
     >
+      {highlighted && nowPlaying && <ArtistTag now={nowPlaying} />}
       <img src={bg} alt="" className="stage-item__bg" />
       <div className="stage-item__content">
         <img src={iconStage} alt="" className="stage-item__icon" />
@@ -315,6 +393,8 @@ function StageItem({ bg, label, left, top, width, height, rotate }) {
 
 // ── Map Page ──────────────────────────────────────────────────────────────────
 
+const ALL_FILTERS_OFF = { stages: false, toilets: false, bars: false }
+
 export default function MapPage({
   onNavigate,
   group,
@@ -323,6 +403,9 @@ export default function MapPage({
   onGroupBannerExpandedChange,
   onJoinGroup,
 }) {
+  const [activeFilters, setActiveFilters] = useState(ALL_FILTERS_OFF)
+  const anyFilterActive = Object.values(activeFilters).some(Boolean)
+
   const [friendsVisible, setFriendsVisible] = useState(true)
   const [meetupMode, setMeetupMode] = useState(null)
   const [pendingMeetupPosition, setPendingMeetupPosition] = useState(null)
@@ -425,28 +508,28 @@ export default function MapPage({
         <img src={mapSvg} alt="Festival map" className="map-bg-layer" />
 
         {/* ── Stages ── */}
-        <StageItem bg={stageBgVidunderbla} label="VIDUNDERBLÅ" left={221} top={89}  width={123} height={56} />
-        <StageItem bg={stageBgBirkelunden} label="BIRKELUNDEN" left={-12} top={383} width={130} height={97}  rotate={23.46} />
-        <StageItem bg={stageBgByfesten}   label="BYFESTEN"    left={58}  top={560} width={105} height={80} />
-        <StageItem bg={stageBgDragonen}   label="DRAGONEN"    left={329} top={391} width={96}  height={59}  rotate={-12.69} />
+        <StageItem bg={stageBgVidunderbla} label="VIDUNDERBLÅ" left={221} top={89}  width={123} height={56}                   hidden={anyFilterActive && !activeFilters.stages} highlighted={anyFilterActive && activeFilters.stages} nowPlaying={STAGE_PROGRAMS['VIDUNDERBLÅ'].now} />
+        <StageItem bg={stageBgBirkelunden} label="BIRKELUNDEN" left={-12} top={383} width={130} height={97}  rotate={23.46}  hidden={anyFilterActive && !activeFilters.stages} highlighted={anyFilterActive && activeFilters.stages} nowPlaying={STAGE_PROGRAMS['BIRKELUNDEN'].now} />
+        <StageItem bg={stageBgByfesten}   label="BYFESTEN"    left={58}  top={560} width={105} height={80}                   hidden={anyFilterActive && !activeFilters.stages} highlighted={anyFilterActive && activeFilters.stages} nowPlaying={STAGE_PROGRAMS['BYFESTEN'].now} />
+        <StageItem bg={stageBgDragonen}   label="DRAGONEN"    left={329} top={391} width={96}  height={59}  rotate={-12.69} hidden={anyFilterActive && !activeFilters.stages} highlighted={anyFilterActive && activeFilters.stages} nowPlaying={STAGE_PROGRAMS['DRAGONEN'].now} />
 
         {/* ── Bars ── */}
-        <MapItem type="bar" icon={iconBar} label="BAR"            left={226} top={278} />
-        <MapItem type="bar" icon={iconBar} label="BAR"            left={169} top={103} />
-        <MapItem type="bar" icon={iconBar} label="BAR"            left={82}  top={316} />
-        <MapItem type="bar" icon={iconBar} label="BAR"            left={123} top={510} />
-        <MapItem type="bar" icon={iconBlasolBar} label={'BLÅ SOL\nBAR'} left={206} top={546} multiLine />
+        <MapItem type="bar" icon={iconBar}       label="BAR"             left={226} top={278} hidden={anyFilterActive && !activeFilters.bars} highlighted={anyFilterActive && activeFilters.bars} queue="short" />
+        <MapItem type="bar" icon={iconBar}       label="BAR"             left={169} top={103} hidden={anyFilterActive && !activeFilters.bars} highlighted={anyFilterActive && activeFilters.bars} queue="medium" />
+        <MapItem type="bar" icon={iconBar}       label="BAR"             left={82}  top={316} hidden={anyFilterActive && !activeFilters.bars} highlighted={anyFilterActive && activeFilters.bars} queue="long" />
+        <MapItem type="bar" icon={iconBar}       label="BAR"             left={123} top={510} hidden={anyFilterActive && !activeFilters.bars} highlighted={anyFilterActive && activeFilters.bars} queue="short" />
+        <MapItem type="bar" icon={iconBlasolBar} label={'BLÅ SOL\nBAR'} left={206} top={546} multiLine hidden={anyFilterActive && !activeFilters.bars} highlighted={anyFilterActive && activeFilters.bars} queue="medium" />
 
         {/* ── Toilets ── */}
-        <MapItem type="wc" icon={iconWC} label="WC" left={16}  top={173} />
-        <MapItem type="wc" icon={iconWC} label="WC" left={204} top={228} />
-        <MapItem type="wc" icon={iconWC} label="WC" left={101} top={655} />
-        <MapItem type="wc" icon={iconWC} label="WC" left={353} top={323} />
+        <MapItem type="wc" icon={iconWC} label="WC" left={16}  top={173} hidden={anyFilterActive && !activeFilters.toilets} highlighted={anyFilterActive && activeFilters.toilets} queue="short" />
+        <MapItem type="wc" icon={iconWC} label="WC" left={204} top={228} hidden={anyFilterActive && !activeFilters.toilets} highlighted={anyFilterActive && activeFilters.toilets} queue="medium" />
+        <MapItem type="wc" icon={iconWC} label="WC" left={101} top={655} hidden={anyFilterActive && !activeFilters.toilets} highlighted={anyFilterActive && activeFilters.toilets} queue="long" />
+        <MapItem type="wc" icon={iconWC} label="WC" left={353} top={323} hidden={anyFilterActive && !activeFilters.toilets} highlighted={anyFilterActive && activeFilters.toilets} queue="short" />
 
-        {/* ── Other ── */}
-        <MapItem type="merch" icon={iconMerch} label="MERCH"           left={253} top={338} />
-        <MapItem type="vand"  icon={iconVand}  label="VAND"            left={164} top={155} />
-        <MapItem type="food"  icon={iconFood}  label={'SPISE\nOMRÅDE'} left={278} top={484} multiLine />
+        {/* ── Other – hidden when any filter is active (no matching category) ── */}
+        <MapItem type="merch" icon={iconMerch} label="MERCH"           left={253} top={338} hidden={anyFilterActive} />
+        <MapItem type="vand"  icon={iconVand}  label="VAND"            left={164} top={155} hidden={anyFilterActive} />
+        <MapItem type="food"  icon={iconFood}  label={'SPISE\nOMRÅDE'} left={278} top={484} multiLine hidden={anyFilterActive} />
 
         {hasCreatedGroup && group && (
           <FriendMarkers
@@ -522,7 +605,13 @@ export default function MapPage({
           />
         )}
         <div className="map-filter-bar">
-          <FilterBar />
+          <FilterBar
+            activeFilters={activeFilters}
+            onToggle={id =>
+              setActiveFilters(prev => ({ ...prev, [id]: !prev[id] }))
+            }
+            onReset={() => setActiveFilters(ALL_FILTERS_OFF)}
+          />
         </div>
         {meetupMode === 'placing' && <MeetupHint />}
       </div>

@@ -1,6 +1,6 @@
 /**
- * Figma asset URLs – all remote image references in one place.
- * Note: Figma CDN URLs expire after 7 days. Re-export from Figma if images stop loading.
+ * Central asset module – exports both local SVG imports and Figma CDN URLs.
+ * Note: Figma CDN URLs expire after ~7 days. Re-export from Figma if remote images stop loading.
  */
 
 import iconCopy from './assets/copy.svg'
