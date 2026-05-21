@@ -45,6 +45,18 @@
   flex-direction: column;
 }
 
+.group-accordion:not(.group-accordion--open) {
+  height: 112px;
+}
+
+.group-accordion--create.group-accordion--open {
+  min-height: 407px;
+}
+
+.group-accordion--join.group-accordion--open {
+  min-height: 233px;
+}
+
 .group-accordion__bg {
   position: absolute;
   inset: 0;
@@ -52,27 +64,30 @@
   height: 100%;
   object-fit: fill;
   pointer-events: none;
+  user-select: none;
   z-index: 0;
 }
 
 .group-accordion__header {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
-  min-height: 112px;
+  flex-shrink: 0;
+  height: 112px;
   padding: 0 32px 0 28px;
   background: none;
   border: none;
   cursor: pointer;
+  overflow: visible;
 }
 
 .group-accordion__title {
-  font-family: var(--font-display);
-  font-size: 24px;
-  line-height: 1.1;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.2;
   text-align: left;
 }
 
@@ -89,7 +104,9 @@
   height: 28px;
   object-fit: contain;
   flex-shrink: 0;
-  transform: rotate(90deg);
+  margin-right: 16px;
+  transform: scale(2.25);
+  transform-origin: center center;
   transition: transform 0.25s ease;
 }
 
@@ -102,33 +119,26 @@
 }
 
 .group-accordion--open .group-accordion__chevron {
-  transform: rotate(-90deg);
+  transform: rotate(180deg) scale(2.25);
 }
 
 .group-accordion__panel {
+  display: none;
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-rows: 0fr;
-  min-height: 0;
-  transition: grid-template-rows 0.25s ease;
+  flex: 1;
+  padding: 8px 28px 24px;
+  overflow: visible;
 }
 
 .group-accordion--open .group-accordion__panel {
-  grid-template-rows: 1fr;
+  display: block;
 }
 
 .group-accordion__panel-inner {
-  overflow: hidden;
-  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 0 28px;
-}
-
-.group-accordion--open .group-accordion__panel-inner {
-  padding-bottom: 24px;
 }
 
 /* ── Form fields inside accordions ───────────────────────────────────────── */

@@ -34,7 +34,6 @@
   width: 24px;
   height: 18px;
   object-fit: contain;
-  transform: rotate(180deg);
 }
 
 /* Section label – used by MyGroupScreen */

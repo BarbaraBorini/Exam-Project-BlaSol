@@ -95,9 +95,10 @@
 }
 
 .my-group-bar__arrow {
-  width: 14px;
-  height: 14px;
+  width: 24px;
+  height: 18px;
   object-fit: contain;
+  transform: rotate(180deg);
 }
 
 .my-group-bar__actions {
@@ -447,23 +448,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4px;
+  padding: 0;
   background: none;
   border: none;
   cursor: pointer;
   flex-shrink: 0;
+  overflow: visible;
 }
 
 .group-banner__chevron-icon {
   width: 12px;
   height: 28px;
   object-fit: contain;
-  transform: rotate(90deg);
+  transform: scale(2) scaleX(-1);
+  transform-origin: center center;
   transition: transform 0.25s ease;
 }
 
 .group-banner--expanded .group-banner__chevron-icon {
-  transform: rotate(-90deg);
+  transform: scale(2) scaleX(-1) scaleY(-1);
 }
 
 .group-banner__panel {

@@ -4,8 +4,10 @@ import StatusBar from '../components/StatusBar'
 import NavigationMenu from '../components/NavigationMenu'
 import {
   BACK_ARROW,
-  BTN_CREATE_BG,
-  BTN_JOIN_BG,
+  BTN_CREATE_BG_CLOSED,
+  BTN_CREATE_BG_OPEN,
+  BTN_JOIN_BG_CLOSED,
+  BTN_JOIN_BG_OPEN,
   ICON_CHEVRON_DOWN,
   ICON_ADD,
 } from '../assets'
@@ -18,7 +20,8 @@ import {
 function GroupAccordion({
   id,
   title,
-  bgSrc,
+  bgClosed,
+  bgOpen,
   variant,
   isOpen,
   onToggle,
@@ -28,7 +31,12 @@ function GroupAccordion({
     <div
       className={`group-accordion group-accordion--${variant}${isOpen ? ' group-accordion--open' : ''}`}
     >
-      <img src={bgSrc} alt="" className="group-accordion__bg" aria-hidden="true" />
+      <img
+        src={isOpen ? bgOpen : bgClosed}
+        alt=""
+        className="group-accordion__bg"
+        aria-hidden="true"
+      />
       <button
         type="button"
         className="group-accordion__header"
@@ -143,7 +151,8 @@ export default function CreateGroupScreen({ onNavigate, onCreateGroup, onJoinGro
           <GroupAccordion
             id="create-group"
             title="Create a new group"
-            bgSrc={BTN_CREATE_BG}
+            bgClosed={BTN_CREATE_BG_CLOSED}
+            bgOpen={BTN_CREATE_BG_OPEN}
             variant="create"
             isOpen={openSection === 'create'}
             onToggle={() => toggleSection('create')}
@@ -218,7 +227,8 @@ export default function CreateGroupScreen({ onNavigate, onCreateGroup, onJoinGro
           <GroupAccordion
             id="join-group"
             title="Join existing group"
-            bgSrc={BTN_JOIN_BG}
+            bgClosed={BTN_JOIN_BG_CLOSED}
+            bgOpen={BTN_JOIN_BG_OPEN}
             variant="join"
             isOpen={openSection === 'join'}
             onToggle={() => toggleSection('join')}

@@ -1,11 +1,28 @@
 
 import iconCopy from './assets/copy.svg'
 import iconBackArrow from './assets/back-arrow.svg'
+import iconSignal from './assets/signal.svg'
+import iconWifi from './assets/wifi.svg'
+import iconBattery from './assets/battery.svg'
+import iconLogo from './assets/Logo.svg'
+import createGroupClosed from './assets/create-group-closed.svg'
+import createGroupOpened from './assets/create-group-opened.svg'
+import joinGroupClosed from './assets/join-group-closed.svg'
+import joinGroupOpened from './assets/join-group-opened.svg'
+import iconFilter from './assets/filter.svg'
+import iconJoinGroup from './assets/joingroup.svg'
+import iconChevronDown from './assets/chevron-down.svg'
+import iconDelete from './assets/delete.svg'
+import iconAdd from './assets/add.svg'
+import iconLeave from './assets/leave.svg'
+import iconAdmin from './assets/admin.svg'
+import iconMember from './assets/member.svg'
+import iconEdit from './assets/edit.svg'
 
 // ── Status Bar ────────────────────────────────────────────────────────────────
-export const ICON_SIGNAL  = 'https://www.figma.com/api/mcp/asset/47ec0461-fca4-4001-8edf-672961389633'
-export const ICON_WIFI    = 'https://www.figma.com/api/mcp/asset/bdc48cb5-63ce-4d7d-bfc2-6e7049a284a6'
-export const ICON_BATTERY = 'https://www.figma.com/api/mcp/asset/8c4f777a-8920-45d0-85ea-07bfe6da1f53'
+export const ICON_SIGNAL  = iconSignal
+export const ICON_WIFI    = iconWifi
+export const ICON_BATTERY = iconBattery
 
 // ── Navigation tab icons (background rendered with CSS) ───────────────────────
 export { default as NAV_HOME } from './assets/home.svg'
@@ -15,27 +32,29 @@ export { default as NAV_ARTISTER } from './assets/artister.svg'
 export { default as NAV_MENU } from './assets/menu.svg'
 
 // ── Loading Screen ────────────────────────────────────────────────────────────
-export const LOGO = 'https://www.figma.com/api/mcp/asset/ac4dff9c-36f7-4719-9df0-e0ad32901c67'
+export const LOGO = iconLogo
 
 // ── Shared UI ─────────────────────────────────────────────────────────────────
 export const BACK_ARROW = iconBackArrow
 
 // ── Create Group Screen ───────────────────────────────────────────────────────
-export const BTN_CREATE_BG = 'https://www.figma.com/api/mcp/asset/e9bb3cfb-ba46-483f-a526-0e542554ae4c'
-export const BTN_JOIN_BG   = 'https://www.figma.com/api/mcp/asset/f196e89d-f4be-4f3d-a41a-041f31f124b3'
+export const BTN_CREATE_BG_CLOSED = createGroupClosed
+export const BTN_CREATE_BG_OPEN   = createGroupOpened
+export const BTN_JOIN_BG_CLOSED   = joinGroupClosed
+export const BTN_JOIN_BG_OPEN     = joinGroupOpened
 
 // ── My Group Screen ───────────────────────────────────────────────────────────
-export const ICON_EDIT     = 'https://www.figma.com/api/mcp/asset/85b3d4b6-ba27-4237-8dae-f94b05618b89'
+export const ICON_EDIT     = iconEdit
 export const ICON_COPY     = iconCopy
-export const AVATAR_ADMIN  = 'https://www.figma.com/api/mcp/asset/cc4adce5-796b-446e-9c5e-78eee9970c0f'
-export const AVATAR_MEMBER = 'https://www.figma.com/api/mcp/asset/0443ee1d-df75-4c21-a8e9-f913a6e67ef9'
-export const ICON_LEAVE    = 'https://www.figma.com/api/mcp/asset/f610e0d6-ee7b-47e7-b56e-de2dd4651408'
-export const ICON_DELETE   = 'https://www.figma.com/api/mcp/asset/b50f4440-346c-4819-934d-548f7bf20e82'
-export const ICON_ADD      = 'https://www.figma.com/api/mcp/asset/2decccbd-c3ba-4911-ac8b-bdbbc65e238c'
+export const AVATAR_ADMIN  = iconAdmin
+export const AVATAR_MEMBER = iconMember
+export const ICON_LEAVE    = iconLeave
+export const ICON_DELETE   = iconDelete
+export const ICON_ADD      = iconAdd
 
 // ── Map Page – header UI ──────────────────────────────────────────────────────
-export const ICON_FILTER       = 'https://www.figma.com/api/mcp/asset/52cd29ce-c00b-474d-8c84-44c430c063ea'
-export const ICON_BANNER_GROUP = 'https://www.figma.com/api/mcp/asset/4535003c-613b-46b2-aa88-62c0868e27ce'
-export const ICON_CHEVRON_DOWN = 'https://www.figma.com/api/mcp/asset/53a10818-cda8-4d2c-8296-97b6d30a6046'
+export const ICON_FILTER       = iconFilter
+export const ICON_BANNER_GROUP = iconJoinGroup
+export const ICON_CHEVRON_DOWN = iconChevronDown
 
 // Stage banner backgrounds are imported locally in MapPage.jsx from src/assets/Background-*.svg
