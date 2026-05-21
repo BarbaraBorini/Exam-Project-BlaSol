@@ -5,14 +5,10 @@ import NavigationMenu from '../components/NavigationMenu'
 import { formatMemberList } from '../groupUtils'
 import { loadMeetupPoint, saveMeetupPoint } from '../groupStorage'
 import iconGroup from '../assets/group.svg'
-import iconArrowRight from '../assets/arrow-right.svg'
 import iconEyeOpen from '../assets/eye_open.svg'
 import iconEyeClosed from '../assets/eye-closed.svg'
 import iconMeetup from '../assets/meetup-point.svg'
 import iconTime from '../assets/time.svg'
-
-// Local map SVG (includes background, paths, North sign, You-marker, AID icon, entrances)
-import mapSvg from '../assets/Map.svg'
 
 // Local icon SVGs
 import iconBar     from '../assets/bar.svg'
@@ -31,7 +27,7 @@ import stageBgDragonen     from '../assets/Background-DRAGONEN.svg'
 
 // Figma CDN – map header UI icons only
 import {
-  ICON_FILTER, ICON_BANNER_GROUP, ICON_CHEVRON_DOWN,
+  ICON_FILTER, ICON_BANNER_GROUP, ICON_CHEVRON_DOWN, BACK_ARROW, MAP_SVG
 } from '../assets'
 
 // ── Sub-components ────────────────────────────────────────────────────────────
@@ -60,7 +56,7 @@ function MyGroupBar({ group, onOpenMyGroup, friendsVisible, onToggleFriends, onN
           onClick={onOpenMyGroup}
           aria-label="Open group settings"
         >
-          <img src={iconArrowRight} alt="" className="my-group-bar__arrow" />
+          <img src={BACK_ARROW} alt="" className="my-group-bar__arrow" />
         </button>
       </div>
       <div className="my-group-bar__actions">
@@ -505,7 +501,7 @@ export default function MapPage({
           - AID / first-aid icon
           - Entrance signs (INDGANG)
         */}
-        <img src={mapSvg} alt="Festival map" className="map-bg-layer" />
+        <img src={MAP_SVG} alt="Festival map" className="map-bg-layer" />
 
         {/* ── Stages ── */}
         <StageItem bg={stageBgVidunderbla} label="VIDUNDERBLÅ" left={221} top={89}  width={123} height={56}                   hidden={anyFilterActive && !activeFilters.stages} highlighted={anyFilterActive && activeFilters.stages} nowPlaying={STAGE_PROGRAMS['VIDUNDERBLÅ'].now} />
