@@ -199,16 +199,6 @@
   z-index: 7;
 }
 
-.meetup-hint::before {
-  content: '';
-  position: absolute;
-  top: -8px;
-  right: 72px;
-  border-left: 9px solid transparent;
-  border-right: 9px solid transparent;
-  border-bottom: 8px solid var(--pink);
-}
-
 .meetup-hint__text {
   margin: 0;
   font-family: var(--font-body);
