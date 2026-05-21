@@ -10,6 +10,8 @@ import iconEyeClosed from '../assets/eye-closed.svg'
 import iconMeetup from '../assets/meetup-point.svg'
 import iconTime from '../assets/time.svg'
 
+// Local map SVG (includes background, paths, North sign, You-marker, AID icon, entrances)
+import mapSvg from '../assets/Map.svg'
 
 // Local icon SVGs
 import iconBar     from '../assets/bar.svg'
@@ -28,8 +30,7 @@ import stageBgDragonen     from '../assets/Background-DRAGONEN.svg'
 
 // Figma CDN – map header UI icons only
 import {
-  ICON_FILTER, ICON_BANNER_GROUP, ICON_CHEVRON_DOWN, BACK_ARROW, MAP_SVG
-} from '../assets'
+  ICON_FILTER, ICON_BANNER_GROUP, ICON_CHEVRON_DOWN, BACK_ARROW} from '../assets'
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
@@ -502,7 +503,7 @@ export default function MapPage({
           - AID / first-aid icon
           - Entrance signs (INDGANG)
         */}
-        <img src={MAP_SVG} alt="Festival map" className="map-bg-layer" />
+        <img src={mapSvg} alt="Festival map" className="map-bg-layer" />
 
         {/* ── Stages ── */}
         <StageItem bg={stageBgVidunderbla} label="VIDUNDERBLÅ" left={221} top={89}  width={123} height={56}                   hidden={anyFilterActive && !activeFilters.stages} highlighted={anyFilterActive && activeFilters.stages} nowPlaying={STAGE_PROGRAMS['VIDUNDERBLÅ'].now} />

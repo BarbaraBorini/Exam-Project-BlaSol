@@ -1,5 +1,11 @@
+
+import iconCopy from './assets/copy.svg'
+import iconBackArrow from './assets/back-arrow.svg'
+
 // ── Status Bar ────────────────────────────────────────────────────────────────
-export { default as STATUS_ICONS } from './assets/status-icons.svg'
+export const ICON_SIGNAL  = 'https://www.figma.com/api/mcp/asset/47ec0461-fca4-4001-8edf-672961389633'
+export const ICON_WIFI    = 'https://www.figma.com/api/mcp/asset/bdc48cb5-63ce-4d7d-bfc2-6e7049a284a6'
+export const ICON_BATTERY = 'https://www.figma.com/api/mcp/asset/8c4f777a-8920-45d0-85ea-07bfe6da1f53'
 
 // ── Navigation tab icons (background rendered with CSS) ───────────────────────
 export { default as NAV_HOME } from './assets/home.svg'
@@ -8,14 +14,11 @@ export { default as NAV_MAP } from './assets/mapicon.svg'
 export { default as NAV_ARTISTER } from './assets/artister.svg'
 export { default as NAV_MENU } from './assets/menu.svg'
 
-// ── MAP SVG ────────────────────────────────────────────────────────────────
-export { default as MAP_SVG } from './assets/Map.svg'
-
 // ── Loading Screen ────────────────────────────────────────────────────────────
-export { default as LOGO} from './assets/Logo.svg'
+export const LOGO = 'https://www.figma.com/api/mcp/asset/ac4dff9c-36f7-4719-9df0-e0ad32901c67'
 
 // ── Shared UI ─────────────────────────────────────────────────────────────────
-export { default as BACK_ARROW } from './assets/back-arrow.svg'
+export const BACK_ARROW = iconBackArrow
 
 // ── Create Group Screen ───────────────────────────────────────────────────────
 export const BTN_CREATE_BG = 'https://www.figma.com/api/mcp/asset/e9bb3cfb-ba46-483f-a526-0e542554ae4c'
@@ -23,7 +26,7 @@ export const BTN_JOIN_BG   = 'https://www.figma.com/api/mcp/asset/f196e89d-f4be-
 
 // ── My Group Screen ───────────────────────────────────────────────────────────
 export const ICON_EDIT     = 'https://www.figma.com/api/mcp/asset/85b3d4b6-ba27-4237-8dae-f94b05618b89'
-export { default as ICON_COPY } from './assets/copy.svg'
+export const ICON_COPY     = iconCopy
 export const AVATAR_ADMIN  = 'https://www.figma.com/api/mcp/asset/cc4adce5-796b-446e-9c5e-78eee9970c0f'
 export const AVATAR_MEMBER = 'https://www.figma.com/api/mcp/asset/0443ee1d-df75-4c21-a8e9-f913a6e67ef9'
 export const ICON_LEAVE    = 'https://www.figma.com/api/mcp/asset/f610e0d6-ee7b-47e7-b56e-de2dd4651408'
