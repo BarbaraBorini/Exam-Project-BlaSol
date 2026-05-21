@@ -8,6 +8,7 @@ import iconGroup from '../assets/group.svg'
 import iconEyeOpen from '../assets/eye_open.svg'
 import iconEyeClosed from '../assets/eye-closed.svg'
 import iconMeetup from '../assets/meetup-point.svg'
+import iconMeetupblue from '../assets/meetup-blue.svg'
 import iconTime from '../assets/time.svg'
 
 // Local map SVG (includes background, paths, North sign, You-marker, AID icon, entrances)
@@ -79,7 +80,7 @@ function MyGroupBar({ group, onOpenMyGroup, friendsVisible, onToggleFriends, onN
           className="my-group-bar__btn my-group-bar__btn--meetup"
           onClick={onNewMeetup}
         >
-          <img src={iconMeetup} alt="" className="my-group-bar__btn-icon" />
+          <img src={iconMeetupblue} alt="" className="my-group-bar__btn-icon" />
           <span>New meetup point</span>
         </button>
       </div>
@@ -90,7 +91,7 @@ function MyGroupBar({ group, onOpenMyGroup, friendsVisible, onToggleFriends, onN
 function FriendMarkers({ members, visible, selectedFriendId, onFriendClick }) {
   if (!visible) return null
 
-  const friends = members.filter(member => !member.isAdmin)
+  const friends = members.filter(member => !member.isCurrentUser)
 
   return friends.map((member, index) => {
     const position = FRIEND_MARKER_POSITIONS[index % FRIEND_MARKER_POSITIONS.length]
@@ -141,15 +142,6 @@ function GroupBanner({ expanded, onExpandedChange, onJoin }) {
   )
 }
 
-// ── Mock live data ────────────────────────────────────────────────────────────
-
-const STAGE_PROGRAMS = {
-  'VIDUNDERBLÅ': { now: 'Saveus',       next: 'Billie Marten' },
-  'BIRKELUNDEN':  { now: 'Phlake',       next: 'Soleima' },
-  'BYFESTEN':     { now: 'MØ',           next: 'Goss' },
-  'DRAGONEN':     { now: 'Lukas Graham', next: null },
-}
-
 // ── Tag sub-components ────────────────────────────────────────────────────────
 
 const PERSON_PATH = 'M3.5 0C2.12 0 1 1.12 1 2.5S2.12 5 3.5 5 6 3.88 6 2.5 4.88 0 3.5 0zm0 6C1.5 6 0 7.5 0 9v3h7V9C7 7.5 5.5 6 3.5 6z'
@@ -167,9 +159,13 @@ function QueueTag({ level }) {
   )
 }
 
-function ArtistTag({ now }) {
+function ArtistTag({ now, inset = 2 }) {
   return (
-    <div className="artist-tag" aria-label={`Now playing: ${now}`}>
+    <div
+      className="artist-tag"
+      style={{ bottom: `calc(100% - ${inset}px)` }}
+      aria-label={`Now playing: ${now}`}
+    >
       <span className="artist-tag__note" aria-hidden="true">♪</span>
       <span className="artist-tag__label">NOW:</span>
       <span className="artist-tag__name">{now}</span>
@@ -369,7 +365,7 @@ function MeetupMarker({ left, top, time, preview = false, showTime = false, onCl
   )
 }
 
-function StageItem({ bg, label, left, top, width, height, rotate, hidden = false, nowPlaying = null, highlighted = false }) {
+function StageItem({ bg, label, left, top, width, height, rotate, hidden = false, nowPlaying = null, highlighted = false, tagInset = 2 }) {
   if (hidden) return null
   return (
     <div
@@ -379,7 +375,7 @@ function StageItem({ bg, label, left, top, width, height, rotate, hidden = false
         ...(rotate ? { transform: `rotate(${rotate}deg)` } : {}),
       }}
     >
-      {highlighted && nowPlaying && <ArtistTag now={nowPlaying} />}
+      {highlighted && nowPlaying && <ArtistTag now={nowPlaying} inset={tagInset} />}
       <img src={bg} alt="" className="stage-item__bg" />
       <div className="stage-item__content">
         <img src={iconStage} alt="" className="stage-item__icon" />
@@ -506,10 +502,10 @@ export default function MapPage({
         <img src={mapSvg} alt="Festival map" className="map-bg-layer" />
 
         {/* ── Stages ── */}
-        <StageItem bg={stageBgVidunderbla} label="VIDUNDERBLÅ" left={221} top={89}  width={123} height={56}                   hidden={anyFilterActive && !activeFilters.stages} highlighted={anyFilterActive && activeFilters.stages} nowPlaying={STAGE_PROGRAMS['VIDUNDERBLÅ'].now} />
-        <StageItem bg={stageBgBirkelunden} label="BIRKELUNDEN" left={-12} top={383} width={130} height={97}  rotate={23.46}  hidden={anyFilterActive && !activeFilters.stages} highlighted={anyFilterActive && activeFilters.stages} nowPlaying={STAGE_PROGRAMS['BIRKELUNDEN'].now} />
-        <StageItem bg={stageBgByfesten}   label="BYFESTEN"    left={58}  top={560} width={105} height={80}                   hidden={anyFilterActive && !activeFilters.stages} highlighted={anyFilterActive && activeFilters.stages} nowPlaying={STAGE_PROGRAMS['BYFESTEN'].now} />
-        <StageItem bg={stageBgDragonen}   label="DRAGONEN"    left={329} top={391} width={96}  height={59}  rotate={-12.69} hidden={anyFilterActive && !activeFilters.stages} highlighted={anyFilterActive && activeFilters.stages} nowPlaying={STAGE_PROGRAMS['DRAGONEN'].now} />
+        <StageItem bg={stageBgVidunderbla} label="VIDUNDERBLÅ" left={221} top={89}  width={123} height={56}                   hidden={anyFilterActive && !activeFilters.stages} highlighted={anyFilterActive && activeFilters.stages} nowPlaying={'Saveus'} />
+        <StageItem bg={stageBgBirkelunden} label="BIRKELUNDEN" left={-12} top={383} width={130} height={97}  rotate={23.46}  hidden={anyFilterActive && !activeFilters.stages} highlighted={anyFilterActive && activeFilters.stages} nowPlaying={'Marie'} tagInset={14} />
+        <StageItem bg={stageBgByfesten}   label="BYFESTEN"    left={58}  top={560} width={105} height={80}                   hidden={anyFilterActive && !activeFilters.stages} highlighted={anyFilterActive && activeFilters.stages} nowPlaying={'Natural Born..'} />
+        <StageItem bg={stageBgDragonen}   label="DRAGONEN"    left={329} top={391} width={96}  height={59}  rotate={-12.69} hidden={anyFilterActive && !activeFilters.stages} highlighted={anyFilterActive && activeFilters.stages} nowPlaying={'Galopderby'} />
 
         {/* ── Bars ── */}
         <MapItem type="bar" icon={iconBar}       label="BAR"             left={226} top={278} hidden={anyFilterActive && !activeFilters.bars} highlighted={anyFilterActive && activeFilters.bars} queue="short" />

@@ -67,7 +67,7 @@ export function withFixedInviteCode(group) {
 }
 
 export function formatMemberList(members) {
-  const labels = members.map(member => (member.isAdmin ? 'You' : member.name))
+  const labels = members.map(member => (member.isCurrentUser ? 'You' : member.name))
   if (labels.length === 0) return ''
   if (labels.length === 1) return `${labels[0]}.`
   if (labels.length === 2) return `${labels[0]} and ${labels[1]}.`
@@ -75,19 +75,19 @@ export function formatMemberList(members) {
 }
 
 const JOINED_GROUP_MEMBERS = [
-  { name: 'Sofia', email: 'sofia@gmail.com' },
-  { name: 'Stinne', email: 'stinne.s@gmail.com' },
-  { name: 'Maria', email: 'maria.t@hotmail.com' },
+  { name: 'Sofia',  email: 'sofia@gmail.com',        isAdmin: true  },
+  { name: 'Stinne', email: 'stinne.s@gmail.com',     isAdmin: false },
+  { name: 'Maria',  email: 'maria.t@hotmail.com',    isAdmin: false },
 ]
 
 export function buildJoinedGroupMembers() {
   return [
-    { id: 1, name: 'You', email: '', isAdmin: true },
+    { id: 1, name: 'Mette', email: 'mette@gmail.com', isAdmin: false, isCurrentUser: true },
     ...JOINED_GROUP_MEMBERS.map((member, index) => ({
       id: index + 2,
       name: member.name,
       email: member.email,
-      isAdmin: false,
+      isAdmin: member.isAdmin,
     })),
   ]
 }
@@ -110,7 +110,7 @@ export function createGroupFromForm(groupName, emails) {
   let nextId = 2
 
   const members = [
-    { id: 1, name: 'You', email: '', isAdmin: true },
+    { id: 1, name: 'Mette', email: 'mette@gmail.com', isAdmin: true, isCurrentUser: true },
     ...invited.map(email => ({
       id: nextId++,
       name: nameFromEmail(email),

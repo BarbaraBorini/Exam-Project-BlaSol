@@ -9,9 +9,9 @@ import {
 } from '../assets'
 import { isEmailInMembers } from '../groupUtils'
 
-function MemberCard({ member, onRemove }) {
+function MemberCard({ member, onRemove, canManage }) {
   return (
-    <div className={`member-card ${member.isAdmin ? 'member-card--admin' : 'member-card--member'}`}>
+    <div className={`member-card ${member.isCurrentUser ? 'member-card--self' : 'member-card--member'}`}>
       <div className="member-card__info">
         <img src={member.avatar} alt="" className="member-card__avatar" />
         <div className="member-card__details">
@@ -22,23 +22,25 @@ function MemberCard({ member, onRemove }) {
         </div>
       </div>
 
-      {member.isAdmin ? (
-        <>
+      <div className="member-card__actions">
+        {member.isAdmin && (
           <span className="member-card__admin-badge">ADMIN</span>
+        )}
+        {member.isCurrentUser ? (
           <button type="button" className="member-card__action" aria-label="Leave group">
             <img src={ICON_LEAVE} alt="" className="member-card__action-icon" />
           </button>
-        </>
-      ) : (
-        <button
-          type="button"
-          className="member-card__delete"
-          onClick={() => onRemove(member.id)}
-          aria-label={`Remove ${member.name}`}
-        >
-          <img src={ICON_DELETE} alt="" className="member-card__delete-icon" />
-        </button>
-      )}
+        ) : canManage ? (
+          <button
+            type="button"
+            className="member-card__delete"
+            onClick={() => onRemove(member.id)}
+            aria-label={`Remove ${member.name}`}
+          >
+            <img src={ICON_DELETE} alt="" className="member-card__delete-icon" />
+          </button>
+        ) : null}
+      </div>
     </div>
   )
 }
@@ -113,9 +115,11 @@ export default function MyGroupScreen({
     return () => clearTimeout(timer)
   }, [copied])
 
+  const currentUserIsAdmin = group.members.some(m => m.isCurrentUser && m.isAdmin)
+
   const members = group.members.map(member => ({
     ...member,
-    avatar: member.isAdmin ? AVATAR_ADMIN : AVATAR_MEMBER,
+    avatar: member.isCurrentUser ? AVATAR_ADMIN : AVATAR_MEMBER,
   }))
 
   const inviteIsDuplicate = isEmailInMembers(inviteEmail, group.members)
@@ -180,6 +184,7 @@ export default function MyGroupScreen({
             <MemberCard
               key={member.id}
               member={member}
+              canManage={currentUserIsAdmin}
               onRemove={memberId => {
                 onRemoveMember(memberId)
                 setShowInviteForm(false)

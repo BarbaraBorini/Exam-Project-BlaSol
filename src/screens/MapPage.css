@@ -5,13 +5,15 @@
   overflow: hidden;
 }
 
-/* Fixed map layer – does not shift when accordion opens */
+/* Fixed map layer – does not shift when accordion opens.
+   top + bottom are kept so that (screen-h - top - bottom) = same map height,
+   meaning no scale change – all items stay aligned to the SVG. */
 .map-container {
   position: absolute;
-  top: 126px;
+  top: 136px;
   left: 0;
   right: 0;
-  bottom: 94px;
+  bottom: 84px;
   z-index: 1;
   overflow: hidden;
 }
@@ -367,7 +369,6 @@
 }
 
 .meetup-marker--preview {
-  opacity: 0.85;
   pointer-events: none;
   cursor: default;
 }
@@ -377,7 +378,6 @@
   width: 24px;
   height: 32px;
   object-fit: contain;
-  filter: drop-shadow(0 1px 2px rgba(38, 68, 140, 0.35));
 }
 
 .meetup-marker__time {
@@ -518,10 +518,6 @@
   transition: background 0.15s, opacity 0.15s;
 }
 
-.filter-bar__label:hover {
-  opacity: 0.85;
-}
-
 /* Clear/reset state – shows "× Ryd" with white pill */
 .filter-bar__label--active {
   background: var(--white);
@@ -563,8 +559,7 @@
 
 /* inactive (default) */
 .filter-pill {
-  background: transparent;
-  border: 1.5px solid rgba(248, 248, 255, 0.35);
+  background-color: var(--pink);
   border-radius: var(--radius-sm);
   height: 24px;
   padding: 4px 8px;
@@ -574,7 +569,7 @@
   font-family: var(--font-body);
   font-weight: 500;
   font-size: 16px;
-  color: rgba(248, 248, 255, 0.5);
+  color: var(--dark-blue);
   letter-spacing: -0.24px;
   white-space: nowrap;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
@@ -582,8 +577,7 @@
 
 /* active */
 .filter-pill--active {
-  background: var(--pink);
-  border-color: var(--pink);
+  background: var(--light-blue);
   color: var(--dark-blue);
 }
 
@@ -685,7 +679,7 @@
 /* ── Artist tag (above stage items when Scener filter is active) ─────────── */
 .artist-tag {
   position: absolute;
-  bottom: calc(100% + 4px);
+  /* bottom is set per-stage via inline style (tagInset prop) */
   left: 50%;
   transform: translateX(-50%);
   display: flex;

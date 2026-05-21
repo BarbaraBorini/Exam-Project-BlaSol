@@ -1,60 +1,35 @@
-
-import iconCopy from './assets/copy.svg'
-import iconBackArrow from './assets/back-arrow.svg'
-import iconSignal from './assets/signal.svg'
-import iconWifi from './assets/wifi.svg'
-import iconBattery from './assets/battery.svg'
-import iconLogo from './assets/Logo.svg'
-import createGroupClosed from './assets/create-group-closed.svg'
-import createGroupOpened from './assets/create-group-opened.svg'
-import joinGroupClosed from './assets/join-group-closed.svg'
-import joinGroupOpened from './assets/join-group-opened.svg'
-import iconFilter from './assets/filter.svg'
-import iconJoinGroup from './assets/joingroup.svg'
-import iconChevronDown from './assets/chevron-down.svg'
-import iconDelete from './assets/delete.svg'
-import iconAdd from './assets/add.svg'
-import iconLeave from './assets/leave.svg'
-import iconAdmin from './assets/admin.svg'
-import iconMember from './assets/member.svg'
-import iconEdit from './assets/edit.svg'
-
 // ── Status Bar ────────────────────────────────────────────────────────────────
-export const ICON_SIGNAL  = iconSignal
-export const ICON_WIFI    = iconWifi
-export const ICON_BATTERY = iconBattery
+export { default as STATUS_ICONS } from './assets/status-icons.svg'
 
-// ── Navigation tab icons (background rendered with CSS) ───────────────────────
-export { default as NAV_HOME } from './assets/home.svg'
-export { default as NAV_PROGRAM } from './assets/program.svg'
-export { default as NAV_MAP } from './assets/mapicon.svg'
+// ── Navigation tab icons ──────────────────────────────────────────────────────
+export { default as NAV_HOME }     from './assets/home.svg'
+export { default as NAV_PROGRAM }  from './assets/program.svg'
+export { default as NAV_MAP }      from './assets/mapicon.svg'
 export { default as NAV_ARTISTER } from './assets/artister.svg'
-export { default as NAV_MENU } from './assets/menu.svg'
+export { default as NAV_MENU }     from './assets/menu.svg'
 
 // ── Loading Screen ────────────────────────────────────────────────────────────
-export const LOGO = iconLogo
+export { default as LOGO } from './assets/Logo.svg'
 
 // ── Shared UI ─────────────────────────────────────────────────────────────────
-export const BACK_ARROW = iconBackArrow
+export { default as BACK_ARROW } from './assets/back-arrow.svg'
 
 // ── Create Group Screen ───────────────────────────────────────────────────────
-export const BTN_CREATE_BG_CLOSED = createGroupClosed
-export const BTN_CREATE_BG_OPEN   = createGroupOpened
-export const BTN_JOIN_BG_CLOSED   = joinGroupClosed
-export const BTN_JOIN_BG_OPEN     = joinGroupOpened
+export { default as BTN_CREATE_BG_CLOSED } from './assets/create-group-closed.svg'
+export { default as BTN_CREATE_BG_OPEN }   from './assets/create-group-opened.svg'
+export { default as BTN_JOIN_BG_CLOSED }   from './assets/join-group-closed.svg'
+export { default as BTN_JOIN_BG_OPEN }     from './assets/join-group-opened.svg'
 
 // ── My Group Screen ───────────────────────────────────────────────────────────
-export const ICON_EDIT     = iconEdit
-export const ICON_COPY     = iconCopy
-export const AVATAR_ADMIN  = iconAdmin
-export const AVATAR_MEMBER = iconMember
-export const ICON_LEAVE    = iconLeave
-export const ICON_DELETE   = iconDelete
-export const ICON_ADD      = iconAdd
+export { default as ICON_EDIT }     from './assets/edit.svg'
+export { default as ICON_COPY }     from './assets/copy.svg'
+export { default as AVATAR_ADMIN }  from './assets/admin.svg'
+export { default as AVATAR_MEMBER } from './assets/member.svg'
+export { default as ICON_LEAVE }    from './assets/leave.svg'
+export { default as ICON_DELETE }   from './assets/delete.svg'
+export { default as ICON_ADD }      from './assets/add.svg'
 
 // ── Map Page – header UI ──────────────────────────────────────────────────────
-export const ICON_FILTER       = iconFilter
-export const ICON_BANNER_GROUP = iconJoinGroup
-export const ICON_CHEVRON_DOWN = iconChevronDown
-
-// Stage banner backgrounds are imported locally in MapPage.jsx from src/assets/Background-*.svg
+export { default as ICON_FILTER }       from './assets/filter.svg'
+export { default as ICON_BANNER_GROUP } from './assets/joingroup.svg'
+export { default as ICON_CHEVRON_DOWN } from './assets/chevron-down.svg'

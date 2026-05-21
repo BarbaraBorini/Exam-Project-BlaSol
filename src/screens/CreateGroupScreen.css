@@ -114,9 +114,6 @@
   filter: brightness(0) invert(1);
 }
 
-.group-accordion--join .group-accordion__chevron {
-  filter: brightness(0.4) sepia(1) hue-rotate(190deg) saturate(4);
-}
 
 .group-accordion--open .group-accordion__chevron {
   transform: rotate(180deg) scale(2.25);
