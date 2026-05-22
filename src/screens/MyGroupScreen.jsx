@@ -5,7 +5,7 @@ import NavigationMenu from '../components/NavigationMenu'
 import {
   BACK_ARROW, ICON_EDIT, ICON_COPY,
   AVATAR_ADMIN, AVATAR_MEMBER,
-  ICON_LEAVE, ICON_DELETE, ICON_ADD,
+  ICON_LEAVE, ICON_DELETE, ICON_ADD, LOCATION
 } from '../assets'
 import { isEmailInMembers } from '../groupUtils'
 
@@ -174,6 +174,25 @@ export default function MyGroupScreen({
                 <img src={ICON_COPY} alt="" className="invitation-code-box__copy-icon" />
               )}
             </button>
+          </div>
+        </div>
+
+        <div className="location-sharing-section">
+          <span className="section-label">Location sharing</span>
+          <div className="location-sharing-card">
+            <div className="location-sharing-card__row">
+              <div className="location-sharing-card__left">
+                <img src={LOCATION} alt="" />
+                <span className="location-sharing-card__label">Share my location</span>
+              </div>
+              <button
+                type="button"
+                className="location-toggle location-toggle--on"
+                aria-label="Toggle location sharing"
+              >
+                <span className="location-toggle__thumb" />
+              </button>
+            </div>
           </div>
         </div>
 

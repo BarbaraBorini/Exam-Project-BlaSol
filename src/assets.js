@@ -28,6 +28,7 @@ export { default as AVATAR_MEMBER } from './assets/member.svg'
 export { default as ICON_LEAVE }    from './assets/leave.svg'
 export { default as ICON_DELETE }   from './assets/delete.svg'
 export { default as ICON_ADD }      from './assets/add.svg'
+export { default as LOCATION }      from './assets/location.svg'
 
 // ── Map Page – header UI ──────────────────────────────────────────────────────
 export { default as ICON_FILTER }       from './assets/filter.svg'
