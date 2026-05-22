@@ -5,27 +5,44 @@ import NavigationMenu from '../components/NavigationMenu'
 import {
   BACK_ARROW, ICON_EDIT, ICON_COPY,
   AVATAR_ADMIN, AVATAR_MEMBER,
-  ICON_LEAVE, ICON_DELETE, ICON_ADD, LOCATION
+  ICON_LEAVE, ICON_DELETE, ICON_ADD, ICON_LOCATION,
 } from '../assets'
 import { isEmailInMembers } from '../groupUtils'
 
+// ── Member Card ───────────────────────────────────────────────────────────────
+//
+// Displays a single group member row.
+//
+// Props:
+//   member     – the member object (name, email, isAdmin, isCurrentUser)
+//   canManage  – true when the logged-in user (Mette) is the group admin;
+//                controls whether the delete button is shown for other members
+//   onRemove   – callback to remove a member by their id
+
 function MemberCard({ member, onRemove, canManage }) {
+  // isCurrentUser → dark blue card (always "You")
+  // isAdmin       → ADMIN badge (whoever the admin is)
+  const cardClass = `member-card ${member.isCurrentUser ? 'member-card--self' : 'member-card--member'}`
+
   return (
-    <div className={`member-card ${member.isCurrentUser ? 'member-card--self' : 'member-card--member'}`}>
+    <div className={cardClass}>
       <div className="member-card__info">
         <img src={member.avatar} alt="" className="member-card__avatar" />
         <div className="member-card__details">
           <span className="member-card__name">{member.name}</span>
-          {member.email ? (
+          {member.email && (
             <span className="member-card__email">{member.email}</span>
-          ) : null}
+          )}
         </div>
       </div>
 
       <div className="member-card__actions">
+        {/* Admin badge – shows on whoever is the current admin */}
         {member.isAdmin && (
           <span className="member-card__admin-badge">ADMIN</span>
         )}
+
+        {/* Current user gets a "leave" button; admins can delete other members */}
         {member.isCurrentUser ? (
           <button type="button" className="member-card__action" aria-label="Leave group">
             <img src={ICON_LEAVE} alt="" className="member-card__action-icon" />
@@ -45,10 +62,17 @@ function MemberCard({ member, onRemove, canManage }) {
   )
 }
 
+// ── Group Name Header ─────────────────────────────────────────────────────────
+//
+// Shows the group name with an edit button.
+// Clicking the edit icon switches to an inline text input.
+// Pressing Enter or clicking away saves the new name.
+
 function GroupNameHeader({ name, onNameChange }) {
   const [isEditing, setIsEditing] = useState(false)
   const [draft, setDraft] = useState(name)
 
+  // Keep the draft in sync if the name changes from outside (e.g. after join)
   useEffect(() => {
     setDraft(name)
   }, [name])
@@ -56,7 +80,7 @@ function GroupNameHeader({ name, onNameChange }) {
   function saveName() {
     const trimmed = draft.trim()
     if (trimmed) onNameChange(trimmed)
-    else setDraft(name)
+    else setDraft(name) // revert if the user cleared the field
     setIsEditing(false)
   }
 
@@ -94,6 +118,11 @@ function GroupNameHeader({ name, onNameChange }) {
   )
 }
 
+// ── My Group Screen ───────────────────────────────────────────────────────────
+//
+// Shows the current group: invitation code, location sharing toggle,
+// and the member list with the option to add or remove members.
+
 export default function MyGroupScreen({
   onNavigate,
   group,
@@ -101,22 +130,28 @@ export default function MyGroupScreen({
   onAddMember,
   onRemoveMember,
 }) {
-  const [inviteEmail, setInviteEmail] = useState('')
+  const [inviteEmail, setInviteEmail]     = useState('')
   const [showInviteForm, setShowInviteForm] = useState(false)
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied]               = useState(false)
 
+  // Reset "Copied!" label when the invitation code changes
   useEffect(() => {
     setCopied(false)
   }, [group.invitationCode])
 
+  // Auto-hide the "Copied!" label after 2 seconds
   useEffect(() => {
     if (!copied) return
     const timer = setTimeout(() => setCopied(false), 2000)
     return () => clearTimeout(timer)
   }, [copied])
 
+  // Check whether the logged-in user (Mette) is the admin of this group.
+  // This is true when she created the group, false when she joined someone else's group.
   const currentUserIsAdmin = group.members.some(m => m.isCurrentUser && m.isAdmin)
 
+  // Attach avatars: Mette always gets the admin/self avatar, everyone else the member avatar.
+  // This is a visual distinction ("You" = dark blue card), not tied to admin status.
   const members = group.members.map(member => ({
     ...member,
     avatar: member.isCurrentUser ? AVATAR_ADMIN : AVATAR_MEMBER,
@@ -129,7 +164,7 @@ export default function MyGroupScreen({
       await navigator.clipboard.writeText(group.invitationCode)
       setCopied(true)
     } catch {
-      // Clipboard API unavailable (e.g. non-secure context) – silently ignore
+      // Clipboard API may be unavailable in non-secure contexts (http)
     }
   }
 
@@ -158,6 +193,7 @@ export default function MyGroupScreen({
 
         <GroupNameHeader name={group.name} onNameChange={onGroupNameChange} />
 
+        {/* ── Invitation code ── */}
         <div className="invitation-section">
           <span className="section-label">Invitation code</span>
           <div className="invitation-code-box">
@@ -177,12 +213,13 @@ export default function MyGroupScreen({
           </div>
         </div>
 
+        {/* ── Location sharing toggle (visual only – not functional) ── */}
         <div className="location-sharing-section">
           <span className="section-label">Location sharing</span>
           <div className="location-sharing-card">
             <div className="location-sharing-card__row">
               <div className="location-sharing-card__left">
-                <img src={LOCATION} alt="" />
+                <img src={ICON_LOCATION} alt="" className="location-sharing-card__icon" />
                 <span className="location-sharing-card__label">Share my location</span>
               </div>
               <button
@@ -196,6 +233,7 @@ export default function MyGroupScreen({
           </div>
         </div>
 
+        {/* ── Member list ── */}
         <div className="members-section">
           <span className="section-label">Group members</span>
 
@@ -212,6 +250,7 @@ export default function MyGroupScreen({
             />
           ))}
 
+          {/* Inline invite form – shown when "Add more" is clicked */}
           {showInviteForm && (
             <form className="invite-member-form" onSubmit={handleAddInvite}>
               <input

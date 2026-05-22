@@ -1,3 +1,21 @@
+/**
+ * groupStorage.js – localStorage persistence for group data
+ *
+ * The browser's localStorage is used to remember the user's group
+ * between page refreshes. Everything is stored under a single JSON key.
+ *
+ * Stored shape (STORAGE_KEY):
+ * {
+ *   group:               { name, invitationCode, members[] }
+ *   hasCreatedGroup:     boolean
+ *   groupBannerExpanded: boolean
+ *   meetupPoint:         { left, top, time } | undefined
+ * }
+ *
+ * A second key (REGISTRY_KEY) keeps a list of known groups so that
+ * invite codes can be looked up even across browser sessions.
+ */
+
 import {
   applyJoinedGroupMembers,
   FIXED_INVITE_CODE,
@@ -6,9 +24,12 @@ import {
   withFixedInviteCode,
 } from './groupUtils'
 
-const STORAGE_KEY = 'blasol-group'
+const STORAGE_KEY  = 'blasol-group'
 const REGISTRY_KEY = 'blasol-group-registry'
 
+// ── Default state ─────────────────────────────────────────────────────────────
+
+/** The state used when no saved data is found (first-time visitor) */
 function getDefaultState() {
   return {
     group: null,
@@ -18,6 +39,9 @@ function getDefaultState() {
   }
 }
 
+// ── Low-level storage helpers ─────────────────────────────────────────────────
+
+/** Reads the raw blob from localStorage. Returns {} on error or if empty. */
 function readStorageBlob() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
@@ -27,66 +51,70 @@ function readStorageBlob() {
   }
 }
 
+// ── Validation ────────────────────────────────────────────────────────────────
+//
+// Before trusting data from localStorage we validate its shape.
+// localStorage can contain stale, corrupted, or manually edited data.
+
 function isValidMeetupPoint(point) {
   if (!point || typeof point !== 'object') return false
-
   return (
     typeof point.left === 'number' &&
-    typeof point.top === 'number' &&
+    typeof point.top  === 'number' &&
     typeof point.time === 'string' &&
     point.time.length > 0
   )
 }
 
-export function loadMeetupPoint() {
-  const point = readStorageBlob().meetupPoint
-  return isValidMeetupPoint(point) ? point : null
-}
-
-export function saveMeetupPoint(meetupPoint) {
-  try {
-    const current = readStorageBlob()
-
-    if (meetupPoint && isValidMeetupPoint(meetupPoint)) {
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({ ...current, meetupPoint }),
-      )
-      return
-    }
-
-    delete current.meetupPoint
-    if (Object.keys(current).length === 0) {
-      localStorage.removeItem(STORAGE_KEY)
-      return
-    }
-
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(current))
-  } catch {
-    // Ignore storage errors
-  }
-}
-
 function isValidGroup(group) {
   if (!group || typeof group !== 'object') return false
-
   return (
-    typeof group.name === 'string' &&
-    group.name.trim().length > 0 &&
-    typeof group.invitationCode === 'string' &&
-    group.invitationCode.length > 0 &&
-    Array.isArray(group.members) &&
-    group.members.length > 0 &&
+    typeof group.name          === 'string' && group.name.trim().length > 0 &&
+    typeof group.invitationCode === 'string' && group.invitationCode.length > 0 &&
+    Array.isArray(group.members) && group.members.length > 0 &&
     group.members.every(
       member =>
         member &&
-        typeof member.id === 'number' &&
-        typeof member.name === 'string' &&
+        typeof member.id      === 'number'  &&
+        typeof member.name    === 'string'  &&
         typeof member.isAdmin === 'boolean',
     )
   )
 }
 
+// ── Meetup point ──────────────────────────────────────────────────────────────
+
+/** Load the last saved meetup point, or null if none/invalid */
+export function loadMeetupPoint() {
+  const point = readStorageBlob().meetupPoint
+  return isValidMeetupPoint(point) ? point : null
+}
+
+/** Save (or clear) the meetup point without overwriting other stored data */
+export function saveMeetupPoint(meetupPoint) {
+  try {
+    const current = readStorageBlob()
+
+    if (meetupPoint && isValidMeetupPoint(meetupPoint)) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...current, meetupPoint }))
+      return
+    }
+
+    // meetupPoint is null/invalid – remove it from the blob
+    delete current.meetupPoint
+    if (Object.keys(current).length === 0) {
+      localStorage.removeItem(STORAGE_KEY)
+      return
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(current))
+  } catch {
+    // Ignore storage errors (e.g. private browsing, quota exceeded)
+  }
+}
+
+// ── Group state ───────────────────────────────────────────────────────────────
+
+/** Load all group-related state from localStorage, or return defaults */
 export function loadGroupState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
@@ -98,7 +126,7 @@ export function loadGroupState() {
     }
 
     const group = withFixedInviteCode(data.group)
-    registerGroup(group)
+    registerGroup(group) // keep the registry up to date
 
     return {
       group,
@@ -112,15 +140,46 @@ export function loadGroupState() {
   }
 }
 
+/** Persist the current group state to localStorage */
+export function saveGroupState({ group, hasCreatedGroup, groupBannerExpanded }) {
+  try {
+    if (!hasCreatedGroup || !isValidGroup(group)) {
+      localStorage.removeItem(STORAGE_KEY)
+      return
+    }
+
+    const normalizedGroup = withFixedInviteCode(group)
+    const existing = readStorageBlob()
+    registerGroup(normalizedGroup)
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        group: normalizedGroup,
+        hasCreatedGroup: true,
+        groupBannerExpanded,
+        // Preserve the meetup point if it was already saved
+        ...(isValidMeetupPoint(existing.meetupPoint)
+          ? { meetupPoint: existing.meetupPoint }
+          : {}),
+      }),
+    )
+  } catch {
+    // Ignore storage errors (e.g. private browsing quota)
+  }
+}
+
+// ── Group registry ────────────────────────────────────────────────────────────
+//
+// A secondary list of known groups stored separately so that invite codes
+// can be resolved even across different sessions or devices sharing storage.
+
 function loadRegistry() {
   try {
     const raw = localStorage.getItem(REGISTRY_KEY)
     if (!raw) return []
-
     const list = JSON.parse(raw)
-    if (!Array.isArray(list)) return []
-
-    return list.filter(isValidGroup)
+    return Array.isArray(list) ? list.filter(isValidGroup) : []
   } catch {
     return []
   }
@@ -134,9 +193,9 @@ function saveRegistry(groups) {
   }
 }
 
+/** Add or update a group in the registry (keyed by invite code) */
 export function registerGroup(group) {
   if (!isValidGroup(group)) return
-
   const code = normalizeInviteCode(group.invitationCode)
   const registry = loadRegistry().filter(
     g => normalizeInviteCode(g.invitationCode) !== code,
@@ -145,6 +204,13 @@ export function registerGroup(group) {
   saveRegistry(registry)
 }
 
+// ── Join flow ─────────────────────────────────────────────────────────────────
+
+/**
+ * Looks up a group by invite code.
+ * Checks the registry first, then the current session, then the built-in
+ * demo group (code "BLASOL").
+ */
 export function findGroupByInviteCode(code) {
   const normalized = normalizeInviteCode(code)
   if (!normalized) return null
@@ -163,6 +229,7 @@ export function findGroupByInviteCode(code) {
     return current.group
   }
 
+  // Fall back to the built-in demo group
   if (normalized === FIXED_INVITE_CODE) {
     return getDefaultJoinableGroup()
   }
@@ -170,6 +237,10 @@ export function findGroupByInviteCode(code) {
   return null
 }
 
+/**
+ * Attempts to join a group using an invite code.
+ * Returns { ok: true, group } on success or { ok: false, error } on failure.
+ */
 export function joinGroupFromInviteCode(code) {
   const normalized = normalizeInviteCode(code)
   if (!normalized) {
@@ -181,32 +252,6 @@ export function joinGroupFromInviteCode(code) {
     return { ok: false, error: 'Invalid invitation code. Check the code and try again.' }
   }
 
+  // Replace the stored members with the standard joined-group member list
   return { ok: true, group: applyJoinedGroupMembers(group) }
-}
-
-export function saveGroupState({ group, hasCreatedGroup, groupBannerExpanded }) {
-  try {
-    if (!hasCreatedGroup || !isValidGroup(group)) {
-      localStorage.removeItem(STORAGE_KEY)
-      return
-    }
-
-    const normalizedGroup = withFixedInviteCode(group)
-    const existing = readStorageBlob()
-    registerGroup(normalizedGroup)
-
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        group: normalizedGroup,
-        hasCreatedGroup: true,
-        groupBannerExpanded,
-        ...(isValidMeetupPoint(existing.meetupPoint)
-          ? { meetupPoint: existing.meetupPoint }
-          : {}),
-      }),
-    )
-  } catch {
-    // Ignore storage errors (e.g. private browsing quota)
-  }
 }

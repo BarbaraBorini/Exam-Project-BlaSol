@@ -197,7 +197,6 @@
   width: 24px;
   height: 24px;
   flex-shrink: 0;
-  color: var(--dark-blue);
 }
 
 .location-sharing-card__label {

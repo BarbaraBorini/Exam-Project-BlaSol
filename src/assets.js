@@ -1,3 +1,13 @@
+/**
+ * Central asset module – all SVG imports live here.
+ *
+ * How to add a new asset:
+ *   export { default as MY_ICON } from './assets/my-icon.svg'
+ *
+ * Then import it in any component:
+ *   import { MY_ICON } from '../assets'
+ */
+
 // ── Status Bar ────────────────────────────────────────────────────────────────
 export { default as STATUS_ICONS } from './assets/status-icons.svg'
 
@@ -23,12 +33,12 @@ export { default as BTN_JOIN_BG_OPEN }     from './assets/join-group-opened.svg'
 // ── My Group Screen ───────────────────────────────────────────────────────────
 export { default as ICON_EDIT }     from './assets/edit.svg'
 export { default as ICON_COPY }     from './assets/copy.svg'
-export { default as AVATAR_ADMIN }  from './assets/admin.svg'
-export { default as AVATAR_MEMBER } from './assets/member.svg'
+export { default as AVATAR_ADMIN }  from './assets/admin.svg'   // avatar used for the current user (Mette)
+export { default as AVATAR_MEMBER } from './assets/member.svg'  // avatar used for other group members
 export { default as ICON_LEAVE }    from './assets/leave.svg'
 export { default as ICON_DELETE }   from './assets/delete.svg'
 export { default as ICON_ADD }      from './assets/add.svg'
-export { default as LOCATION }      from './assets/location.svg'
+export { default as ICON_LOCATION } from './assets/location.svg'
 
 // ── Map Page – header UI ──────────────────────────────────────────────────────
 export { default as ICON_FILTER }       from './assets/filter.svg'

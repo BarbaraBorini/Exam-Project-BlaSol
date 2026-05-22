@@ -1,3 +1,13 @@
+/**
+ * CreateGroupScreen.jsx – Create or join a group
+ *
+ * This screen has two accordion sections:
+ *  1. "Create a new group"  – the user fills in a name and friend emails
+ *  2. "Join existing group" – the user enters an invitation code
+ *
+ * Only one accordion can be open at a time.
+ */
+
 import { useState } from 'react'
 import './CreateGroupScreen.css'
 import StatusBar from '../components/StatusBar'
@@ -17,6 +27,12 @@ import {
   isEmailDuplicate,
 } from '../groupUtils'
 
+// ── Group Accordion ───────────────────────────────────────────────────────────
+//
+// A reusable expanding/collapsing card.
+// When closed it shows the background image for its closed state;
+// when open it shows the open-state image and reveals the inner content.
+
 function GroupAccordion({
   id,
   title,
@@ -31,6 +47,7 @@ function GroupAccordion({
     <div
       className={`group-accordion group-accordion--${variant}${isOpen ? ' group-accordion--open' : ''}`}
     >
+      {/* Background image switches between closed and open states */}
       <img
         src={isOpen ? bgOpen : bgClosed}
         alt=""
@@ -58,40 +75,55 @@ function GroupAccordion({
   )
 }
 
+// ── Create Group Screen ───────────────────────────────────────────────────────
+
 export default function CreateGroupScreen({ onNavigate, onCreateGroup, onJoinGroup }) {
+  // Which accordion is currently open: 'create' | 'join' | null
   const [openSection, setOpenSection] = useState(null)
+
+  // Create-group form state
   const [groupName, setGroupName] = useState('')
-  const [emails, setEmails] = useState([''])
+  const [emails, setEmails]       = useState(['']) // starts with one empty email field
+
+  // Join-group form state
   const [inviteCode, setInviteCode] = useState('')
-  const [joinError, setJoinError] = useState('')
+  const [joinError, setJoinError]   = useState('')
 
+  // "Create" is only enabled when a group name is set and no email is duplicated
   const canAddMoreEmails = allEmailsFilled(emails) && !hasDuplicateEmails(emails)
-  const canCreate =
-    groupName.trim().length > 0 && !hasDuplicateEmails(emails)
+  const canCreate        = groupName.trim().length > 0 && !hasDuplicateEmails(emails)
 
+  // Toggle an accordion open/closed; opening one closes the other
   function toggleSection(section) {
     setOpenSection(prev => (prev === section ? null : section))
   }
 
+  // Add a new empty email input field
   function addEmailField() {
     if (!canAddMoreEmails) return
     setEmails(prev => [...prev, ''])
   }
 
+  // Update a specific email field and auto-remove it if the user clears it
   function updateEmail(index, value) {
     setEmails(prev => {
       const next = prev.map((email, i) => (i === index ? value : email))
       const hadEmail = prev[index].trim().length > 0
       const isCleared = !value.trim()
 
+      // If the user deletes the content of a field, remove the extra empty row
       if (hadEmail && isCleared) {
         return pruneExtraEmptyField(next, index)
       }
-
       return next
     })
   }
 
+  /**
+   * Removes an extra empty email field from the list.
+   * We keep exactly one empty field at most; any extras are pruned.
+   * excludeIndex prevents the field currently being edited from being removed.
+   */
   function pruneExtraEmptyField(list, excludeIndex = -1) {
     const emptyIndex = list.findIndex(
       (email, i) => i !== excludeIndex && !email.trim(),
@@ -103,9 +135,10 @@ export default function CreateGroupScreen({ onNavigate, onCreateGroup, onJoinGro
     return list
   }
 
+  // Remove a specific email field by index
   function removeEmailField(index) {
     setEmails(prev => {
-      if (prev.length <= 1) return ['']
+      if (prev.length <= 1) return [''] // always keep at least one field
       const withoutDeleted = prev.filter((_, i) => i !== index)
       return pruneExtraEmptyField(withoutDeleted)
     })
@@ -148,6 +181,8 @@ export default function CreateGroupScreen({ onNavigate, onCreateGroup, onJoinGro
         </p>
 
         <div className="create-group__accordions">
+
+          {/* ── Create a new group ── */}
           <GroupAccordion
             id="create-group"
             title="Create a new group"
@@ -183,6 +218,7 @@ export default function CreateGroupScreen({ onNavigate, onCreateGroup, onJoinGro
                     aria-label={`Friend email ${index + 1}`}
                     aria-invalid={isEmailDuplicate(email, emails, index)}
                   />
+                  {/* Only show remove button when there is more than one field */}
                   {emails.length > 1 && (
                     <button
                       type="button"
@@ -224,6 +260,7 @@ export default function CreateGroupScreen({ onNavigate, onCreateGroup, onJoinGro
             </form>
           </GroupAccordion>
 
+          {/* ── Join existing group ── */}
           <GroupAccordion
             id="join-group"
             title="Join existing group"
@@ -242,8 +279,8 @@ export default function CreateGroupScreen({ onNavigate, onCreateGroup, onJoinGro
               className={`group-form__input${joinError ? ' group-form__input--error' : ''}`}
               value={inviteCode}
               onChange={e => {
-                setInviteCode(e.target.value.toUpperCase())
-                setJoinError('')
+                setInviteCode(e.target.value.toUpperCase()) // always uppercase for the code
+                setJoinError('')                            // clear previous error on change
               }}
               placeholder="Enter invitation code"
               aria-invalid={Boolean(joinError)}
@@ -264,6 +301,7 @@ export default function CreateGroupScreen({ onNavigate, onCreateGroup, onJoinGro
               </button>
             </div>
           </GroupAccordion>
+
         </div>
       </div>
 
